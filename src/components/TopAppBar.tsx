@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -12,16 +13,29 @@ const navLinks = [
 
 export default function TopAppBar() {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/20 shadow-sm h-16 flex justify-between items-center px-6">
+    <header
+      className={`fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/20 h-16 flex justify-between items-center px-6 transition-shadow duration-300 ${
+        scrolled ? "shadow-lg" : "shadow-sm"
+      }`}
+    >
       <div className="flex items-center gap-3">
         <span className="material-symbols-outlined text-slate-900">
           location_on
         </span>
         <Link
           href="/"
-          className="font-[family-name:var(--font-headline)] font-bold text-slate-900 tracking-tighter text-xl"
+          className="font-[family-name:var(--font-headline)] font-bold text-slate-900 tracking-tighter text-xl md:text-2xl"
         >
           Dockside Blackbook
         </Link>

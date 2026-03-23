@@ -93,6 +93,11 @@ export default function ServicesPage() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Private Chef - Main Feature */}
           <div className="md:col-span-8 group relative overflow-hidden rounded-xl bg-primary-container min-h-[500px] flex items-end">
+            <img
+              src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80"
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent" />
             <div className="relative p-8 md:p-12 w-full">
               <div className="inline-block px-3 py-1 mb-4 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold uppercase tracking-wider rounded-full">
@@ -119,7 +124,13 @@ export default function ServicesPage() {
 
           {/* Custom Provisions */}
           <div className="md:col-span-4 group relative overflow-hidden rounded-xl min-h-[500px] flex flex-col">
-            <div className="h-1/2 bg-surface-container-high" />
+            <div className="h-1/2 bg-surface-container-high relative overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&q=80"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
             <div className="p-8 flex-grow flex flex-col justify-between bg-primary-container text-white">
               <div>
                 <h3 className="font-[family-name:var(--font-headline)] text-2xl mb-2">
@@ -145,6 +156,11 @@ export default function ServicesPage() {
           {/* Floral Designs */}
           <div className="md:col-span-5 group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-sm p-1">
             <div className="aspect-[4/5] rounded-lg overflow-hidden relative bg-surface-container-high">
+              <img
+                src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=80"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
+              />
               <div className="absolute bottom-6 left-6 right-6 glass-card p-6 rounded-lg">
                 <h3 className="font-[family-name:var(--font-headline)] text-xl text-primary mb-1">
                   Floral Designs
@@ -167,7 +183,13 @@ export default function ServicesPage() {
           <div className="md:col-span-7 grid grid-rows-2 gap-6">
             {/* Air & Sea Transfers */}
             <div className="bg-surface-container-low rounded-xl overflow-hidden flex items-stretch">
-              <div className="w-1/3 bg-surface-container-high" />
+              <div className="w-1/3 bg-surface-container-high relative overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80"
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover opacity-70"
+                />
+              </div>
               <div className="w-2/3 p-8 flex flex-col justify-center">
                 <span className="text-on-tertiary-container text-[10px] font-bold uppercase tracking-widest mb-2 block">
                   Rapid Transit
@@ -195,6 +217,11 @@ export default function ServicesPage() {
 
             {/* Chauffeur */}
             <div className="group relative overflow-hidden rounded-xl bg-primary">
+              <img
+                src="https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=800&q=80"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-30 transition-transform duration-700 group-hover:scale-105"
+              />
               <div className="relative h-full p-8 flex items-center justify-between">
                 <div>
                   <h3 className="font-[family-name:var(--font-headline)] text-2xl text-white mb-2">
