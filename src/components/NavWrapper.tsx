@@ -13,6 +13,7 @@ export default async function NavWrapper() {
 
   const navUser = authUser
     ? {
+        id: authUser.id,
         fullName: authUser.fullName,
         role: authUser.role,
         unreadCount,

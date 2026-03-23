@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import NotificationBell from "./NotificationBell";
 
 export interface NavUser {
+  id: string;
   fullName: string | null;
   role: "boat_owner" | "service_provider" | null;
   unreadCount: number;
@@ -15,6 +16,7 @@ const ownerLinks = [
   { href: "/", label: "Home" },
   { href: "/discover", label: "Discover" },
   { href: "/request", label: "Request" },
+  { href: "/vessels", label: "Vessels" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/messages", label: "Messages" },
 ];
@@ -104,7 +106,7 @@ export default function TopAppBar({ user }: { user?: NavUser | null }) {
 
         {user ? (
           <div className="flex items-center gap-2">
-            <NotificationBell initialCount={user.unreadCount} />
+            <NotificationBell initialCount={user.unreadCount} userId={user.id} />
             <div className="w-8 h-8 rounded-full bg-primary-container overflow-hidden border border-outline-variant/30 cursor-pointer hover:scale-95 active:scale-90 transition-transform">
               <div className="w-full h-full bg-primary-container flex items-center justify-center text-on-primary text-xs font-bold">
                 {initials || "U"}

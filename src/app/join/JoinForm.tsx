@@ -22,33 +22,34 @@ export default function JoinForm() {
     try {
       const supabase = createClient();
 
-      // Insert provider application (pending verification)
+      // Check if an application with this email already exists
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: insertError } = await (supabase as any).from("providers").insert({
+      const { data: existing } = await (supabase as any)
+        .from("provider_applications")
+        .select("id")
+        .eq("email", contactEmail)
+        .single();
+      if (existing) {
+        setError("An application with this email already exists.");
+        setLoading(false);
+        return;
+      }
+
+      // Insert provider application (pending review)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: insertError } = await (supabase as any).from("provider_applications").insert({
+        email: contactEmail,
         business_name: companyName,
-        slug: companyName
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, ""),
-        description: description || `${serviceType} services based in ${primaryPort}`,
-        contact_email: contactEmail,
-        phone_primary: phone || null,
-        languages: ["English"],
-        verification_status: "pending",
-        availability: "available",
-        emergency_available: false,
-        avg_response_minutes: 60,
-        response_rate: 0,
-        avg_rating: 0,
-        total_reviews: 0,
-        total_jobs: 0,
-        reliability_score: 0,
-        team_size: 1,
+        service_type: serviceType,
+        primary_port: primaryPort,
+        phone: phone || null,
+        message: description || null,
+        status: 'pending',
       });
 
       if (insertError) {
         if (insertError.code === "23505") {
-          setError("A provider with this name already exists.");
+          setError("An application with this email already exists.");
         } else {
           setError(insertError.message);
         }

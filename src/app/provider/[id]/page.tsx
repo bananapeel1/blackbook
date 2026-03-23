@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 60;
 
+// TODO: Use get_provider_public RPC once migration 003 is deployed
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getProvider(slug: string): Promise<any | null> {
   const supabase = await createClient();
@@ -57,6 +58,9 @@ export default async function ProviderProfilePage({
 }) {
   const { id } = await params;
   const provider = await getProvider(id);
+
+  // Contact masking: default to locked until RPC function is deployed
+  if (provider) provider.contact_unlocked = false;
 
   if (!provider) {
     notFound();
@@ -261,6 +265,51 @@ export default async function ProviderProfilePage({
                 <div className="flex items-center gap-3">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   <span className="text-sm text-on-surface-variant font-medium">Currently Available</span>
+                </div>
+              )}
+
+              {/* Contact masking - locked state */}
+              {provider.contact_unlocked ? (
+                <div className="mt-4 space-y-3 pt-4 border-t border-outline-variant/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="material-symbols-outlined text-green-600 text-sm" style={{fontVariationSettings: "'FILL' 1"}}>lock_open</span>
+                    <span className="text-xs font-bold text-green-700 uppercase tracking-wider">Contact Unlocked</span>
+                  </div>
+                  {provider.phone && (
+                    <a href={`tel:${provider.phone}`} className="flex items-center gap-3 text-sm text-primary hover:underline">
+                      <span className="material-symbols-outlined text-sm">call</span>
+                      {provider.phone}
+                    </a>
+                  )}
+                  {provider.whatsapp && (
+                    <a href={`https://wa.me/${provider.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-green-700 hover:underline">
+                      <span className="material-symbols-outlined text-sm">chat</span>
+                      WhatsApp
+                    </a>
+                  )}
+                  {provider.email && (
+                    <a href={`mailto:${provider.email}`} className="flex items-center gap-3 text-sm text-primary hover:underline">
+                      <span className="material-symbols-outlined text-sm">mail</span>
+                      {provider.email}
+                    </a>
+                  )}
+                  {provider.website && (
+                    <a href={provider.website.startsWith('http') ? provider.website : `https://${provider.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-primary hover:underline">
+                      <span className="material-symbols-outlined text-sm">language</span>
+                      Website
+                    </a>
+                  )}
+                </div>
+              ) : (
+                <div className="mt-4 pt-4 border-t border-outline-variant/10">
+                  <div className="bg-surface-container-high/50 rounded-lg p-4 text-center">
+                    <span className="material-symbols-outlined text-outline text-2xl mb-2 block">lock</span>
+                    <p className="text-xs text-on-surface-variant font-medium mb-1">Contact details locked</p>
+                    <p className="text-[10px] text-outline leading-relaxed">Accept a quote from this provider to unlock direct contact via phone, WhatsApp, and email.</p>
+                    <Link href="/request" className="mt-3 inline-block text-xs font-bold text-primary hover:underline">
+                      Request a Quote →
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>

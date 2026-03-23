@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
@@ -9,7 +9,7 @@ interface Notification {
   type: string;
   title: string;
   body: string | null;
-  link: string | null;
+  data: Record<string, string> | null;
   read_at: string | null;
   created_at: string;
 }
@@ -28,10 +28,31 @@ function formatTimeAgo(dateStr: string) {
 const typeIcon: Record<string, string> = {
   new_quote: "request_quote",
   quote_accepted: "check_circle",
+  quote_declined: "cancel",
   new_message: "chat",
   new_request: "receipt_long",
   request_update: "update",
 };
+
+function resolveNotificationLink(n: Notification): string | null {
+  const data = n.data;
+  if (!data) return null;
+  switch (n.type) {
+    case "new_quote":
+    case "request_update":
+      return data.request_id ? `/quotes/${data.request_id}` : null;
+    case "quote_accepted":
+      return data.conversation_id ? `/messages` : `/dashboard/provider`;
+    case "quote_declined":
+      return `/dashboard/provider`;
+    case "new_message":
+      return `/messages`;
+    case "new_request":
+      return data.request_id ? `/dashboard/provider/request/${data.request_id}` : `/dashboard/provider`;
+    default:
+      return null;
+  }
+}
 
 function NotificationItem({
   notification: n,
@@ -40,6 +61,8 @@ function NotificationItem({
   notification: Notification;
   onClose: () => void;
 }) {
+  const link = resolveNotificationLink(n);
+
   const content = (
     <>
       <div className="w-8 h-8 rounded-lg bg-secondary-container flex items-center justify-center shrink-0 mt-0.5">
@@ -76,9 +99,9 @@ function NotificationItem({
     !n.read_at ? "bg-primary-container/10" : ""
   }`;
 
-  if (n.link) {
+  if (link) {
     return (
-      <Link href={n.link} onClick={onClose} className={cls}>
+      <Link href={link} onClick={onClose} className={cls}>
         {content}
       </Link>
     );
@@ -89,11 +112,12 @@ function NotificationItem({
 
 export default function NotificationBell({
   initialCount,
+  userId,
 }: {
   initialCount: number;
+  userId: string;
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const supabase = createClient() as any;
+  const supabase = createClient();
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(initialCount);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -111,20 +135,46 @@ export default function NotificationBell({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Real-time subscription for new notifications
+  useEffect(() => {
+    const channel = supabase
+      .channel(`notifications:${userId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload: { new: Notification }) => {
+          setCount((prev) => prev + 1);
+          setNotifications((prev) => [payload.new as Notification, ...prev]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, userId]);
+
   // Load notifications when opened
-  async function loadNotifications() {
+  const loadNotifications = useCallback(async () => {
     if (loaded) return;
-    const { data } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data } = await (supabase as any)
       .from("notifications")
-      .select("id, type, title, body, link, read_at, created_at")
+      .select("id, type, title, body, data, read_at, created_at")
       .order("created_at", { ascending: false })
       .limit(20);
     setNotifications((data as Notification[]) ?? []);
     setLoaded(true);
-  }
+  }, [loaded, supabase]);
 
   async function markAllRead() {
-    await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any)
       .from("notifications")
       .update({ read_at: new Date().toISOString() })
       .is("read_at", null);
@@ -152,14 +202,14 @@ export default function NotificationBell({
           notifications
         </span>
         {count > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-error text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-error text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
             {count > 9 ? "9+" : count}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 w-80 bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant/10 z-[100] overflow-hidden">
+        <div className="absolute right-0 top-12 w-80 md:w-96 bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant/10 z-[100] overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant/10">
             <h3 className="text-sm font-bold text-on-surface">Notifications</h3>
             {count > 0 && (
@@ -173,7 +223,13 @@ export default function NotificationBell({
           </div>
 
           <div className="max-h-80 overflow-y-auto">
-            {notifications.length === 0 ? (
+            {!loaded ? (
+              <div className="py-8 text-center">
+                <span className="material-symbols-outlined animate-spin text-outline text-2xl">
+                  progress_activity
+                </span>
+              </div>
+            ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <span className="material-symbols-outlined text-outline text-3xl mb-2 block">
                   notifications_none

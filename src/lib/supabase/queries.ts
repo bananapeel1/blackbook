@@ -346,3 +346,42 @@ export async function getUnreadNotificationCount() {
     return 0;
   }
 }
+
+export async function getVesselsForUser() {
+  try {
+    const supabase = await db();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return [];
+
+    const { data, error } = await supabase
+      .from("vessels")
+      .select("*")
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("getVesselsForUser error:", error.message);
+      return [];
+    }
+    return data || [];
+  } catch (err) {
+    console.error("getVesselsForUser unexpected error:", err);
+    return [];
+  }
+}
+
+export async function getVesselById(id: string) {
+  try {
+    const supabase = await db();
+    const { data, error } = await supabase
+      .from("vessels")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
