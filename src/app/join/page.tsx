@@ -1,5 +1,5 @@
-import TopAppBar from "@/components/TopAppBar";
-import BottomNav from "@/components/BottomNav";
+import NavWrapper from "@/components/NavWrapper";
+import JoinForm from "./JoinForm";
 
 const benefits = [
   {
@@ -32,7 +32,7 @@ const stats = [
 export default function JoinPage() {
   return (
     <>
-      <TopAppBar />
+      <NavWrapper />
 
       <main className="pt-16 pb-24 md:pb-0">
         {/* Hero */}
@@ -142,69 +142,11 @@ export default function JoinPage() {
             </div>
 
             {/* Right Panel - Form */}
-            <div className="bg-surface-container-lowest p-12">
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                    Company Name
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-b-2 border-outline-variant/20 focus:border-primary rounded-t-lg px-4 py-4 text-sm outline-none transition-all focus:bg-surface-container-lowest"
-                    placeholder="Your business name"
-                    type="text"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                    Service Type
-                  </label>
-                  <select className="w-full bg-surface-container-low border-b-2 border-outline-variant/20 focus:border-primary rounded-t-lg px-4 py-4 text-sm outline-none transition-all">
-                    <option>Select your primary service</option>
-                    <option>Marine Engineering</option>
-                    <option>Electrical Systems</option>
-                    <option>Hull & Deck Services</option>
-                    <option>Provisioning</option>
-                    <option>Concierge & Hospitality</option>
-                    <option>Transport & Logistics</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                    Primary Port
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-b-2 border-outline-variant/20 focus:border-primary rounded-t-lg px-4 py-4 text-sm outline-none transition-all focus:bg-surface-container-lowest"
-                    placeholder="e.g. Port de Saint-Tropez"
-                    type="text"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                    Contact Email
-                  </label>
-                  <input
-                    className="w-full bg-surface-container-low border-b-2 border-outline-variant/20 focus:border-primary rounded-t-lg px-4 py-4 text-sm outline-none transition-all focus:bg-surface-container-lowest"
-                    placeholder="your@email.com"
-                    type="email"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-primary text-on-primary py-4 rounded-lg font-bold uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all mt-4"
-                >
-                  Submit for Verification
-                </button>
-                <p className="text-[10px] text-center text-on-surface-variant mt-4 uppercase tracking-widest">
-                  Applications reviewed within 48 hours
-                </p>
-              </form>
-            </div>
+            <JoinForm />
           </div>
         </section>
       </main>
 
-      <BottomNav />
     </>
   );
 }

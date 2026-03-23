@@ -1,5 +1,4 @@
-import TopAppBar from "@/components/TopAppBar";
-import BottomNav from "@/components/BottomNav";
+import NavWrapper from "@/components/NavWrapper";
 import ConciergeFAB from "@/components/ConciergeFAB";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -75,7 +74,7 @@ export default async function ProviderProfilePage({
 
   return (
     <>
-      <TopAppBar />
+      <NavWrapper />
 
       <main className="pt-16 pb-32">
         {/* Hero */}
@@ -296,7 +295,6 @@ export default async function ProviderProfilePage({
       </main>
 
       <ConciergeFAB />
-      <BottomNav />
     </>
   );
 }

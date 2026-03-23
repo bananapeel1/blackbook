@@ -1,92 +1,84 @@
-import TopAppBar from "@/components/TopAppBar";
-import BottomNav from "@/components/BottomNav";
+import NavWrapper from "@/components/NavWrapper";
 import ConciergeFAB from "@/components/ConciergeFAB";
 import Link from "next/link";
+import {
+  getRequestsForUser,
+  getConversationsForUser,
+} from "@/lib/supabase/queries";
 
-const activeRequests = [
-  {
-    id: "hull-maintenance",
-    title: "Hull Maintenance",
-    provider: "3 providers responding",
-    status: "Collecting Quotes",
-    statusColor: "bg-secondary-container text-on-secondary-container",
-    icon: "directions_boat",
-    date: "Submitted Sep 12",
-  },
-  {
-    id: "fuel-delivery",
-    title: "Fuel Delivery",
-    provider: "Action needed from you",
-    status: "Action Required",
-    statusColor: "bg-error-container text-on-error-container",
-    icon: "local_gas_station",
-    date: "Submitted Sep 10",
-  },
-];
+function formatTimeAgo(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
 
-const recentMessages = [
-  {
-    name: "Azure Technical",
-    message: "We can schedule the inspection for Thursday morning if that...",
-    time: "2m ago",
-    unread: true,
+const statusConfig: Record<
+  string,
+  { label: string; color: string }
+> = {
+  submitted: {
+    label: "Submitted",
+    color: "bg-secondary-container text-on-secondary-container",
   },
-  {
-    name: "Riviera Detailing",
-    message: "The teak samples have arrived. Would you like to review...",
-    time: "1h ago",
-    unread: false,
+  collecting_quotes: {
+    label: "Collecting Quotes",
+    color: "bg-secondary-container text-on-secondary-container",
   },
-];
+  quotes_received: {
+    label: "Action Required",
+    color: "bg-error-container text-on-error-container",
+  },
+  accepted: {
+    label: "Accepted",
+    color: "bg-tertiary-container text-on-tertiary-container",
+  },
+  in_progress: {
+    label: "In Progress",
+    color: "bg-tertiary-container text-on-tertiary-container",
+  },
+  completed: {
+    label: "Completed",
+    color: "bg-secondary-container text-on-secondary-container",
+  },
+  cancelled: {
+    label: "Cancelled",
+    color: "bg-surface-container-highest text-on-surface-variant",
+  },
+};
 
-const upcomingServices = [
-  {
-    day: "18",
-    month: "Sep",
-    title: "Generator Service",
-    provider: "Azure Technical Marine",
-    time: "09:00 - 12:00",
-  },
-  {
-    day: "21",
-    month: "Sep",
-    title: "Hull Inspection",
-    provider: "Riviera Detailing Co.",
-    time: "14:00 - 16:00",
-  },
-];
+export default async function DashboardPage() {
+  const [requests, conversations] = await Promise.all([
+    getRequestsForUser(),
+    getConversationsForUser(),
+  ]);
 
-const savedProviders = [
-  {
-    id: "azure-technical",
-    name: "Azure Technical",
-    specialty: "Engineering",
-    rating: 4.9,
-  },
-  {
-    id: "riviera-detailing",
-    name: "Riviera Detailing",
-    specialty: "Finishing & Teak",
-    rating: 4.8,
-  },
-  {
-    id: "cote-azur-props",
-    name: "Cote d'Azur Props",
-    specialty: "Propulsion",
-    rating: 5.0,
-  },
-];
+  // Active requests (not completed or cancelled)
+  const activeRequests = requests.filter(
+    (r: any) => !["completed", "cancelled"].includes(r.status)
+  );
 
-export default function DashboardPage() {
+  // Get the current week label
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay());
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+  const weekLabel = `Week of ${weekStart.toLocaleDateString("en-US", { month: "long", day: "numeric" })} - ${weekEnd.getDate()}`;
+
   return (
     <>
-      <TopAppBar />
+      <NavWrapper />
 
       <main className="pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto">
         {/* Welcome Header */}
         <div className="mb-10">
           <p className="text-on-tertiary-container text-xs font-bold uppercase tracking-widest mb-1">
-            Week of September 15 - 21
+            {weekLabel}
           </p>
           <h1 className="font-[family-name:var(--font-headline)] text-3xl md:text-5xl font-extrabold text-primary tracking-tight leading-none">
             Welcome, Captain
@@ -109,44 +101,76 @@ export default function DashboardPage() {
                 <span className="material-symbols-outlined text-sm">add</span>
               </Link>
             </div>
-            <div className="space-y-4">
-              {activeRequests.map((request) => (
-                <Link
-                  key={request.id}
-                  href={`/quotes`}
-                  className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-container-high transition-colors group"
-                >
-                  <div className="bg-secondary-container w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-primary text-2xl">
-                      {request.icon}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-semibold text-on-surface">
-                        {request.title}
-                      </h3>
-                      <span
-                        className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${request.statusColor}`}
-                      >
-                        {request.status}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-on-surface-variant text-sm">
-                        {request.provider}
-                      </p>
-                      <span className="text-outline text-[10px] uppercase tracking-widest font-semibold">
-                        {request.date}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">
-                    chevron_right
+
+            {activeRequests.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="bg-secondary-container w-16 h-16 rounded-2xl flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined text-primary text-3xl">
+                    directions_boat
                   </span>
+                </div>
+                <h3 className="font-semibold text-on-surface text-sm mb-1">
+                  No requests yet
+                </h3>
+                <p className="text-on-surface-variant text-xs max-w-xs mb-6">
+                  Create your first service request to get quotes from trusted
+                  marine providers.
+                </p>
+                <Link
+                  href="/request"
+                  className="bg-primary text-on-primary px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-primary-container transition-colors"
+                >
+                  Create Request
                 </Link>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {activeRequests.map((request: any) => {
+                  const status = statusConfig[request.status] ??
+                    statusConfig.submitted;
+                  const hasQuotes = request.matched_provider_count > 0;
+
+                  return (
+                    <Link
+                      key={request.id}
+                      href={`/quotes/${request.id}`}
+                      className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-container-high transition-colors group"
+                    >
+                      <div className="bg-secondary-container w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-primary text-2xl">
+                          {request.category?.icon ?? "directions_boat"}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <h3 className="font-semibold text-on-surface">
+                            {request.title}
+                          </h3>
+                          <span
+                            className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${status.color}`}
+                          >
+                            {status.label}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <p className="text-on-surface-variant text-sm">
+                            {hasQuotes
+                              ? `${request.matched_provider_count} provider${request.matched_provider_count > 1 ? "s" : ""} responding`
+                              : "Waiting for providers"}
+                          </p>
+                          <span className="text-outline text-[10px] uppercase tracking-widest font-semibold">
+                            {formatTimeAgo(request.created_at)}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">
+                        chevron_right
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Recent Messages - 4 cols */}
@@ -154,36 +178,50 @@ export default function DashboardPage() {
             <h2 className="font-[family-name:var(--font-headline)] text-xl font-bold text-primary mb-6">
               Recent Messages
             </h2>
-            <div className="space-y-4">
-              {recentMessages.map((msg) => (
-                <div
-                  key={msg.name}
-                  className="flex items-start gap-3 cursor-pointer group"
-                >
-                  <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-primary text-lg">
-                      person
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-semibold text-on-surface">
-                        {msg.name}
-                      </p>
-                      <span className="text-[10px] text-outline uppercase tracking-widest font-semibold">
-                        {msg.time}
+
+            {conversations.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <span className="material-symbols-outlined text-outline text-3xl mb-2">
+                  chat_bubble_outline
+                </span>
+                <p className="text-on-surface-variant text-xs">
+                  No messages yet
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {conversations.map((conv: any) => (
+                  <div
+                    key={conv.id}
+                    className="flex items-start gap-3 cursor-pointer group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary text-lg">
+                        person
                       </span>
                     </div>
-                    <p className="text-on-surface-variant text-sm truncate">
-                      {msg.message}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-sm font-semibold text-on-surface">
+                          {conv.otherUser?.name ?? "Unknown"}
+                        </p>
+                        {conv.lastMessage && (
+                          <span className="text-[10px] text-outline uppercase tracking-widest font-semibold">
+                            {formatTimeAgo(conv.lastMessage.created_at)}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-on-surface-variant text-sm truncate">
+                        {conv.lastMessage?.content ?? "No messages yet"}
+                      </p>
+                    </div>
+                    {conv.lastMessage?.unread && (
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0" />
+                    )}
                   </div>
-                  {msg.unread && (
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0" />
-                  )}
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
             <Link
               href="/messages"
               className="mt-6 block w-full py-3 bg-surface-container-highest text-primary text-center text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-surface-container-high transition-colors"
@@ -192,49 +230,81 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* Upcoming Services - 5 cols */}
+          {/* Upcoming Services - 5 cols (show accepted/in-progress requests as upcoming) */}
           <div className="md:col-span-5 bg-surface-container-low rounded-2xl p-6">
             <h2 className="font-[family-name:var(--font-headline)] text-xl font-bold text-primary mb-6">
               Upcoming Services
             </h2>
-            <div className="space-y-4">
-              {upcomingServices.map((service) => (
-                <div
-                  key={service.title}
-                  className="flex items-center gap-4 group"
-                >
-                  <div className="bg-primary rounded-xl w-14 h-14 flex flex-col items-center justify-center shrink-0">
-                    <span className="text-white text-lg font-bold leading-none">
-                      {service.day}
+            {(() => {
+              const upcoming = requests
+                .filter(
+                  (r: any) =>
+                    ["accepted", "in_progress"].includes(r.status) &&
+                    r.preferred_date
+                )
+                .slice(0, 3);
+
+              if (upcoming.length === 0) {
+                return (
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <span className="material-symbols-outlined text-outline text-3xl mb-2">
+                      event_available
                     </span>
-                    <span className="text-white/60 text-[10px] uppercase tracking-wider font-semibold">
-                      {service.month}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-on-surface text-sm">
-                      {service.title}
-                    </h3>
                     <p className="text-on-surface-variant text-xs">
-                      {service.provider}
-                    </p>
-                    <p className="text-outline text-[10px] uppercase tracking-widest font-semibold mt-1">
-                      {service.time}
+                      No upcoming services scheduled
                     </p>
                   </div>
-                  <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">
-                    chevron_right
-                  </span>
+                );
+              }
+
+              return (
+                <div className="space-y-4">
+                  {upcoming.map((service: any) => {
+                    const date = new Date(service.preferred_date);
+                    return (
+                      <div
+                        key={service.id}
+                        className="flex items-center gap-4 group"
+                      >
+                        <div className="bg-primary rounded-xl w-14 h-14 flex flex-col items-center justify-center shrink-0">
+                          <span className="text-white text-lg font-bold leading-none">
+                            {date.getDate()}
+                          </span>
+                          <span className="text-white/60 text-[10px] uppercase tracking-wider font-semibold">
+                            {date.toLocaleDateString("en-US", {
+                              month: "short",
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-on-surface text-sm">
+                            {service.title}
+                          </h3>
+                          <p className="text-on-surface-variant text-xs">
+                            {service.category?.name ?? "Service"}
+                          </p>
+                          {service.preferred_time && (
+                            <p className="text-outline text-[10px] uppercase tracking-widest font-semibold mt-1">
+                              {service.preferred_time}
+                            </p>
+                          )}
+                        </div>
+                        <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">
+                          chevron_right
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </div>
 
-          {/* Saved Blackbook - 7 cols */}
+          {/* Saved Blackbook - 7 cols (Quick Actions) */}
           <div className="md:col-span-7 bg-surface-container-low rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-[family-name:var(--font-headline)] text-xl font-bold text-primary">
-                Saved Blackbook
+                Quick Actions
               </h2>
               <Link
                 href="/discover"
@@ -245,43 +315,60 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {savedProviders.map((provider) => (
-                <Link
-                  key={provider.id}
-                  href={`/provider/${provider.id}`}
-                  className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
-                >
-                  <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary text-2xl">
-                      engineering
-                    </span>
-                  </div>
-                  <h3 className="font-semibold text-on-surface text-sm mb-1">
-                    {provider.name}
-                  </h3>
-                  <p className="text-on-surface-variant text-xs mb-2">
-                    {provider.specialty}
-                  </p>
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="text-primary font-bold text-sm">
-                      {provider.rating}
-                    </span>
-                    <span
-                      className="material-symbols-outlined text-primary text-sm"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                    >
-                      star
-                    </span>
-                  </div>
-                </Link>
-              ))}
+              <Link
+                href="/request"
+                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
+              >
+                <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary text-2xl">
+                    add_circle
+                  </span>
+                </div>
+                <h3 className="font-semibold text-on-surface text-sm mb-1">
+                  New Request
+                </h3>
+                <p className="text-on-surface-variant text-xs">
+                  Get quotes from providers
+                </p>
+              </Link>
+              <Link
+                href="/discover"
+                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
+              >
+                <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary text-2xl">
+                    explore
+                  </span>
+                </div>
+                <h3 className="font-semibold text-on-surface text-sm mb-1">
+                  Find Providers
+                </h3>
+                <p className="text-on-surface-variant text-xs">
+                  Browse the directory
+                </p>
+              </Link>
+              <Link
+                href="/messages"
+                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
+              >
+                <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary text-2xl">
+                    chat
+                  </span>
+                </div>
+                <h3 className="font-semibold text-on-surface text-sm mb-1">
+                  Messages
+                </h3>
+                <p className="text-on-surface-variant text-xs">
+                  Talk to providers
+                </p>
+              </Link>
             </div>
           </div>
         </div>
       </main>
 
       <ConciergeFAB />
-      <BottomNav />
     </>
   );
 }

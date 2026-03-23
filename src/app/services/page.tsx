@@ -1,5 +1,4 @@
-import TopAppBar from "@/components/TopAppBar";
-import BottomNav from "@/components/BottomNav";
+import NavWrapper from "@/components/NavWrapper";
 import ConciergeFAB from "@/components/ConciergeFAB";
 import Link from "next/link";
 
@@ -58,7 +57,7 @@ const services = [
 export default function ServicesPage() {
   return (
     <>
-      <TopAppBar />
+      <NavWrapper />
 
       <main className="pt-24 pb-32 px-6 max-w-7xl mx-auto">
         {/* Hero Header */}
@@ -283,7 +282,6 @@ export default function ServicesPage() {
       </main>
 
       <ConciergeFAB />
-      <BottomNav />
     </>
   );
 }

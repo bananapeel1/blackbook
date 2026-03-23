@@ -1,5 +1,4 @@
-import TopAppBar from "@/components/TopAppBar";
-import BottomNav from "@/components/BottomNav";
+import NavWrapper from "@/components/NavWrapper";
 import ConciergeFAB from "@/components/ConciergeFAB";
 import FadeIn from "@/components/FadeIn";
 import Link from "next/link";
@@ -52,7 +51,7 @@ const journalPosts = [
 export default function HomePage() {
   return (
     <>
-      <TopAppBar />
+      <NavWrapper />
 
       <main className="pt-16 pb-24 md:pb-0">
         {/* Hero Section */}
@@ -317,7 +316,6 @@ export default function HomePage() {
       </main>
 
       <ConciergeFAB />
-      <BottomNav />
     </>
   );
 }
