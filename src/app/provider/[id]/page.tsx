@@ -2,334 +2,296 @@ import TopAppBar from "@/components/TopAppBar";
 import BottomNav from "@/components/BottomNav";
 import ConciergeFAB from "@/components/ConciergeFAB";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
 
-const services = [
-  {
-    icon: "manufacturing",
-    title: "Engine Diagnostics",
-    description:
-      "Complete propulsion analysis using OEM-certified diagnostic systems.",
-  },
-  {
-    icon: "electrical_services",
-    title: "Electrical Systems",
-    description:
-      "Full electrical auditing, rewiring, and AC/DC system management.",
-  },
-  {
-    icon: "hydraulic",
-    title: "Hydraulic Overhaul",
-    description:
-      "Precision rebuild and maintenance of steering, stabiliser, and crane hydraulics.",
-  },
-  {
-    icon: "emergency",
-    title: "24/7 Rapid Response",
-    description:
-      "Emergency callout within 90 minutes across the Western Mediterranean.",
-  },
-];
+export const revalidate = 60;
 
-const reviews = [
-  {
-    name: "Captain J. Hartley",
-    vessel: "MY Sovereign",
-    rating: 5,
-    text: "Exceptional attention to detail on our twin MTU overhaul. The team worked through the night to meet our departure schedule. True professionals.",
-    date: "2 weeks ago",
-  },
-  {
-    name: "Chief Eng. S. Novak",
-    vessel: "SY Windchaser",
-    rating: 5,
-    text: "Their hydraulic expertise is unmatched in the region. Fast, clean, and they left the engine room spotless. Highly recommended.",
-    date: "1 month ago",
-  },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function getProvider(slug: string): Promise<any | null> {
+  const supabase = await createClient();
 
-const certifications = [
-  "MTU Authorized Service Partner",
-  "Volvo Penta Gold Standard",
-  "Lloyds Register Certified",
-];
+  const { data, error } = await supabase
+    .from("providers")
+    .select(`
+      *,
+      provider_services (
+        id,
+        description,
+        price_min,
+        price_max,
+        currency,
+        emergency_available,
+        service_categories (
+          name,
+          slug,
+          icon
+        )
+      ),
+      provider_coverage (
+        radius_km,
+        is_primary,
+        locations (
+          name,
+          slug,
+          country,
+          region
+        )
+      ),
+      provider_certifications (
+        id,
+        name,
+        issuer
+      )
+    `)
+    .eq("slug", slug)
+    .single();
 
-const galleryPlaceholders = Array.from({ length: 6 });
+  if (error || !data) return null;
+  return data;
+}
 
-export default function ProviderProfilePage() {
+export default async function ProviderProfilePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const provider = await getProvider(id);
+
+  if (!provider) {
+    notFound();
+  }
+
+  const isVerified =
+    provider.verification_status === "verified" ||
+    provider.verification_status === "premium";
+  const isPremium = provider.verification_status === "premium";
+
+  const coverageLocations =
+    provider.provider_coverage
+      ?.map((pc: { locations: { name: string } | null }) => pc.locations?.name)
+      .filter(Boolean) || [];
+
   return (
     <>
       <TopAppBar />
 
-      <main className="pt-16 pb-32 md:pb-0">
-        {/* Hero Section */}
-        <section className="bg-primary-container relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/70 to-transparent" />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-20 py-16 md:py-24">
-            <Link
-              href="/discover"
-              className="inline-flex items-center gap-2 text-white/60 text-xs uppercase tracking-widest font-semibold mb-8 hover:text-white transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">
-                arrow_back
-              </span>
-              Back to Discovery
-            </Link>
-
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-              <div>
-                <h1 className="font-[family-name:var(--font-headline)] text-4xl md:text-6xl text-white font-bold tracking-tight mb-4">
-                  Azure Technical Marine
-                </h1>
-                <p className="text-on-primary-container text-lg font-light mb-6">
-                  Marine Engineering &amp; HVAC Specialists
-                </p>
-                <div className="flex flex-wrap items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg">
-                      <span className="text-white font-bold text-lg">4.9</span>
-                      <span
-                        className="material-symbols-outlined text-tertiary-fixed text-sm"
-                        style={{
-                          fontVariationSettings: "'FILL' 1",
-                        }}
-                      >
-                        star
-                      </span>
-                    </div>
-                    <span className="text-white/60 text-sm">124 reviews</span>
-                  </div>
-                  <span className="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
-                    <span
-                      className="material-symbols-outlined text-xs"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                    >
-                      verified
-                    </span>
-                    Verified
-                  </span>
-                  <span className="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-xs">
-                      timer
-                    </span>
-                    Fast Responder
+      <main className="pt-16 pb-32">
+        {/* Hero */}
+        <section className="relative h-[400px] md:h-[530px] w-full overflow-hidden">
+          <div className="absolute inset-0 bg-primary-container" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-primary/80" />
+          <div className="relative h-full container mx-auto px-6 flex flex-col justify-end pb-12">
+            <div className="flex items-start gap-6">
+              <div className="h-20 w-20 md:h-32 md:w-32 rounded-xl bg-surface-container-lowest p-2 shadow-2xl shrink-0">
+                <div className="w-full h-full bg-primary flex items-center justify-center rounded-lg">
+                  <span className="material-symbols-outlined text-on-primary text-4xl md:text-5xl">
+                    sailing
                   </span>
                 </div>
               </div>
-              <div className="hidden md:flex items-center gap-3">
-                <button className="bg-white/10 backdrop-blur-md text-white p-3 rounded-xl hover:bg-white/20 transition-colors">
-                  <span className="material-symbols-outlined">bookmark</span>
-                </button>
-                <button className="bg-white/10 backdrop-blur-md text-white p-3 rounded-xl hover:bg-white/20 transition-colors">
-                  <span className="material-symbols-outlined">share</span>
-                </button>
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2">
+                  {isVerified && (
+                    <span className="bg-secondary-fixed text-on-secondary-fixed text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded">
+                      {isPremium ? "Premium" : "Verified"}
+                    </span>
+                  )}
+                  {provider.avg_response_time_minutes &&
+                    provider.avg_response_time_minutes <= 30 && (
+                      <span className="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded">
+                        Fast Responder
+                      </span>
+                    )}
+                </div>
+                <h1 className="font-[family-name:var(--font-headline)] text-3xl md:text-6xl text-white font-bold tracking-tight leading-none">
+                  {provider.business_name}
+                </h1>
+                <div className="flex items-center gap-2 text-white/90">
+                  <span
+                    className="material-symbols-outlined text-secondary-fixed-dim"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    star
+                  </span>
+                  <span className="font-bold text-lg">
+                    {Number(provider.avg_rating).toFixed(1)}
+                  </span>
+                  <span className="text-sm opacity-60">
+                    ({provider.total_reviews} Reviews)
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Main Content */}
-        <section className="max-w-7xl mx-auto px-6 md:px-20 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-            {/* Left Column - Main Content */}
-            <div className="md:col-span-8 space-y-12">
-              {/* About Us */}
-              <div>
-                <h2 className="font-[family-name:var(--font-headline)] text-2xl font-bold text-primary mb-4">
-                  About Us
-                </h2>
-                <p className="text-on-surface-variant leading-relaxed mb-4">
-                  Azure Technical Marine has been the trusted engineering partner
-                  for superyachts and commercial vessels across the Western
-                  Mediterranean since 2009. Our team of 14 factory-trained
-                  engineers specialises in complex propulsion diagnostics,
-                  high-voltage electrical systems, and precision hydraulic work.
+        {/* Content */}
+        <div className="container mx-auto px-6 mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Main */}
+          <div className="lg:col-span-8 space-y-16">
+            {/* About */}
+            <section>
+              <h2 className="font-[family-name:var(--font-headline)] text-3xl text-primary mb-6 tracking-tight">
+                About Us
+              </h2>
+              <div className="bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
+                <p className="text-on-surface-variant text-lg leading-relaxed max-w-2xl relative z-10">
+                  {provider.description}
                 </p>
-                <p className="text-on-surface-variant leading-relaxed">
-                  We hold direct authorisations from MTU, Volvo Penta, and
-                  Caterpillar, ensuring OEM-quality service with genuine parts
-                  and factory-standard procedures. Our 24/7 rapid response
-                  capability means we can have an engineer on your vessel within
-                  90 minutes, anywhere from Monaco to Mallorca.
-                </p>
+                {coverageLocations.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2 relative z-10">
+                    {coverageLocations.map((loc: string) => (
+                      <span
+                        key={loc}
+                        className="bg-surface-container-lowest px-3 py-1 rounded-full text-xs font-semibold text-on-surface-variant"
+                      >
+                        {loc}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
+            </section>
 
-              {/* Services Grid */}
-              <div>
-                <h2 className="font-[family-name:var(--font-headline)] text-2xl font-bold text-primary mb-6">
-                  Our Services
+            {/* Services */}
+            {provider.provider_services?.length > 0 && (
+              <section>
+                <h2 className="font-[family-name:var(--font-headline)] text-3xl text-primary mb-6 tracking-tight">
+                  Services Offered
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {services.map((service) => (
-                    <div
-                      key={service.title}
-                      className="bg-surface-container-low rounded-xl p-6 hover:bg-surface-container-high transition-colors group"
-                    >
-                      <div className="bg-secondary-container w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                        <span className="material-symbols-outlined text-primary text-2xl">
-                          {service.icon}
-                        </span>
-                      </div>
-                      <h3 className="font-[family-name:var(--font-headline)] text-lg font-bold text-primary mb-2">
-                        {service.title}
-                      </h3>
-                      <p className="text-on-surface-variant text-sm leading-relaxed">
-                        {service.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Photo Gallery */}
-              <div>
-                <h2 className="font-[family-name:var(--font-headline)] text-2xl font-bold text-primary mb-6">
-                  Photo Gallery
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {galleryPlaceholders.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`rounded-xl overflow-hidden ${
-                        i === 0
-                          ? "col-span-2 row-span-2 aspect-square"
-                          : "aspect-[4/3]"
-                      }`}
-                    >
-                      <div className="w-full h-full bg-surface-container-high" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column - Sidebar */}
-            <div className="md:col-span-4 space-y-6">
-              {/* Client Reviews */}
-              <div className="bg-surface-container-low rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-[family-name:var(--font-headline)] text-lg font-bold text-primary">
-                    Client Reviews
-                  </h3>
-                  <span className="text-xs text-on-surface-variant font-semibold">
-                    124 total
-                  </span>
-                </div>
-                <div className="space-y-6">
-                  {reviews.map((review) => (
-                    <div
-                      key={review.name}
-                      className="border-b border-outline-variant/20 pb-6 last:border-0 last:pb-0"
-                    >
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
-                          <span className="material-symbols-outlined text-primary text-lg">
-                            person
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {provider.provider_services.map(
+                    (service: {
+                      id: string;
+                      description: string | null;
+                      price_min: number | null;
+                      price_max: number | null;
+                      currency: string;
+                      emergency_available: boolean;
+                      service_categories: { name: string; icon: string | null } | null;
+                    }) => (
+                      <div
+                        key={service.id}
+                        className="bg-surface-container-lowest p-6 rounded-xl ledger-shadow flex gap-4"
+                      >
+                        <div className="h-12 w-12 rounded bg-primary-container flex items-center justify-center shrink-0">
+                          <span className="material-symbols-outlined text-white">
+                            {service.service_categories?.icon || "build"}
                           </span>
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-on-surface">
-                            {review.name}
-                          </p>
-                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">
-                            {review.vessel}
-                          </p>
+                          <h3 className="font-bold text-primary mb-1">
+                            {service.service_categories?.name}
+                          </h3>
+                          {service.description && (
+                            <p className="text-sm text-on-surface-variant">
+                              {service.description}
+                            </p>
+                          )}
+                          {service.price_min && service.price_max && (
+                            <p className="text-xs text-on-tertiary-container font-semibold mt-2">
+                              {service.currency} {service.price_min} - {service.price_max}
+                            </p>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 mb-2">
-                        {Array.from({ length: review.rating }).map((_, i) => (
-                          <span
-                            key={i}
-                            className="material-symbols-outlined text-primary text-sm"
-                            style={{
-                              fontVariationSettings: "'FILL' 1",
-                            }}
-                          >
-                            star
-                          </span>
-                        ))}
-                      </div>
-                      <p className="text-on-surface-variant text-sm leading-relaxed">
-                        {review.text}
-                      </p>
-                      <p className="text-outline text-[10px] mt-2 uppercase tracking-widest font-semibold">
-                        {review.date}
-                      </p>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
-              </div>
+              </section>
+            )}
 
-              {/* Certifications */}
-              <div className="bg-primary rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="material-symbols-outlined text-tertiary-fixed text-2xl">
-                    workspace_premium
-                  </span>
-                  <h3 className="font-[family-name:var(--font-headline)] text-lg font-bold text-white">
+            {/* Stats */}
+            <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { value: provider.total_jobs, label: "Jobs Completed" },
+                { value: `${provider.avg_response_time_minutes || "—"}m`, label: "Avg Response" },
+                { value: `${Number(provider.completion_rate).toFixed(0)}%`, label: "Completion" },
+                { value: provider.team_size || "—", label: "Team Size" },
+              ].map((stat) => (
+                <div key={stat.label} className="bg-surface-container-low p-6 rounded-xl text-center">
+                  <p className="text-2xl font-[family-name:var(--font-headline)] font-bold text-primary">
+                    {stat.value}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </section>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-4 space-y-8">
+            {/* CTA */}
+            <div className="bg-primary p-8 rounded-xl text-center">
+              <h3 className="font-[family-name:var(--font-headline)] text-xl text-white mb-3">
+                Need this service?
+              </h3>
+              <p className="text-on-primary-container text-sm mb-6">
+                Get a quote from {provider.business_name}
+              </p>
+              <Link
+                href="/request"
+                className="block w-full py-4 bg-tertiary-fixed text-on-tertiary-fixed font-bold rounded-lg hover:bg-tertiary-fixed-dim transition-colors text-center"
+              >
+                Request Quote
+              </Link>
+            </div>
+
+            {/* Contact */}
+            <div className="bg-surface-container-low p-6 rounded-xl space-y-4">
+              <h3 className="font-[family-name:var(--font-headline)] text-lg text-primary mb-2">
+                Contact
+              </h3>
+              {provider.languages?.length > 0 && (
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-on-surface-variant text-sm">translate</span>
+                  <span className="text-sm text-on-surface-variant">{provider.languages.join(", ")}</span>
+                </div>
+              )}
+              {provider.founded_year && (
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-on-surface-variant text-sm">calendar_month</span>
+                  <span className="text-sm text-on-surface-variant">Est. {provider.founded_year}</span>
+                </div>
+              )}
+              {provider.availability === "available" && (
+                <div className="flex items-center gap-3">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-sm text-on-surface-variant font-medium">Currently Available</span>
+                </div>
+              )}
+            </div>
+
+            {/* Certifications */}
+            {provider.provider_certifications?.length > 0 && (
+              <section className="bg-primary-container p-8 rounded-xl text-white overflow-hidden relative">
+                <div className="relative z-10">
+                  <h3 className="font-[family-name:var(--font-headline)] text-xl mb-4">
                     Certifications
                   </h3>
+                  <ul className="space-y-3 text-sm text-on-primary-container">
+                    {provider.provider_certifications.map(
+                      (cert: { id: string; name: string; issuer: string | null }) => (
+                        <li key={cert.id} className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-tertiary-fixed text-lg">
+                            check_circle
+                          </span>
+                          {cert.name}
+                        </li>
+                      )
+                    )}
+                  </ul>
                 </div>
-                <ul className="space-y-4">
-                  {certifications.map((cert) => (
-                    <li key={cert} className="flex items-center gap-3">
-                      <span
-                        className="material-symbols-outlined text-tertiary-fixed text-sm"
-                        style={{ fontVariationSettings: "'FILL' 1" }}
-                      >
-                        verified
-                      </span>
-                      <span className="text-white/80 text-sm font-medium">
-                        {cert}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Contact Info */}
-              <div className="bg-surface-container-low rounded-2xl p-6">
-                <h3 className="font-[family-name:var(--font-headline)] text-lg font-bold text-primary mb-4">
-                  Contact
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-on-surface-variant">
-                      location_on
-                    </span>
-                    <span className="text-on-surface-variant text-sm">
-                      Port de Saint-Tropez, France
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-on-surface-variant">
-                      schedule
-                    </span>
-                    <span className="text-on-surface-variant text-sm">
-                      24/7 Emergency Available
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-on-surface-variant">
-                      avg_pace
-                    </span>
-                    <span className="text-on-surface-variant text-sm">
-                      Avg. response: 14 minutes
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-8xl opacity-10 text-white">
+                  verified
+                </span>
+              </section>
+            )}
           </div>
-        </section>
-
-        {/* Floating Request Quote Button */}
-        <div className="fixed bottom-20 md:bottom-8 left-0 right-0 z-40 px-6 md:px-0 md:flex md:justify-center">
-          <Link
-            href="/request"
-            className="block w-full md:w-auto bg-primary text-on-primary px-10 py-4 rounded-xl uppercase tracking-widest text-sm font-bold shadow-2xl hover:-translate-y-1 transition-all text-center"
-          >
-            Request Quote
-          </Link>
         </div>
       </main>
 
