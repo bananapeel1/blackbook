@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import TopAppBar from '@/components/TopAppBar';
 import ConciergeFAB from '@/components/ConciergeFAB';
+import NewVesselModal from '@/components/NewVesselModal';
 import { useRequestForm } from '@/lib/request-context';
 import { createClient } from '@/lib/supabase/client';
 
@@ -37,6 +38,7 @@ export default function RequestStep2Page() {
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [loadingVessels, setLoadingVessels] = useState(true);
   const [loadingLocations, setLoadingLocations] = useState(true);
+  const [showNewVesselModal, setShowNewVesselModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -230,6 +232,7 @@ export default function RequestStep2Page() {
         {vessels.length > 0 && (
           <button
             type="button"
+            onClick={() => setShowNewVesselModal(true)}
             className="w-full rounded-xl border-2 border-dashed border-outline-variant/40 p-4 flex items-center justify-center gap-2 text-on-surface-variant text-sm font-semibold hover:bg-surface-container-low hover:border-primary/30 transition-all mb-10"
           >
             <span className="material-symbols-outlined text-lg">add</span>
@@ -267,12 +270,6 @@ export default function RequestStep2Page() {
                 className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl pl-10 pr-4 py-3 text-on-surface text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
               />
             </div>
-            <button
-              type="button"
-              className="w-12 h-12 rounded-xl bg-surface-container-low border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-all flex-shrink-0"
-            >
-              <span className="material-symbols-outlined">my_location</span>
-            </button>
           </div>
 
           {/* Location Dropdown */}
@@ -370,6 +367,17 @@ export default function RequestStep2Page() {
       </div>
 
       <ConciergeFAB />
+
+      {showNewVesselModal && (
+        <NewVesselModal
+          onClose={() => setShowNewVesselModal(false)}
+          onCreated={(vessel) => {
+            setVessels((prev) => [...prev, vessel]);
+            selectVessel(vessel);
+            setShowNewVesselModal(false);
+          }}
+        />
+      )}
     </>
   );
 }

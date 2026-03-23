@@ -2,6 +2,7 @@ import NavWrapper from "@/components/NavWrapper";
 import ConciergeFAB from "@/components/ConciergeFAB";
 import FadeIn from "@/components/FadeIn";
 import Link from "next/link";
+import HeroSearch from "@/components/HeroSearch";
 
 const categories = [
   {
@@ -71,27 +72,14 @@ export default function HomePage() {
               Exclusive access to premium maintenance, provisioning, and
               concierge services for the discerning mariner.
             </p>
-            <div className="bg-surface-container-lowest p-2 rounded-xl flex flex-col md:flex-row gap-2 shadow-2xl">
-              <div className="flex-1 flex items-center px-4 py-3 gap-3 border-b md:border-b-0 md:border-r border-outline-variant/20">
-                <span className="material-symbols-outlined text-outline">
-                  anchor
-                </span>
-                <input
-                  className="bg-transparent border-none focus:ring-0 w-full text-on-surface outline-none"
-                  placeholder="Where are you heading?"
-                  type="text"
-                />
-              </div>
-              <Link
-                href="/discover"
-                className="bg-primary text-on-primary px-8 py-4 rounded-lg uppercase tracking-widest text-xs font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2"
-              >
-                Search Port
-                <span className="material-symbols-outlined text-sm">
-                  arrow_forward
-                </span>
-              </Link>
-            </div>
+            <HeroSearch />
+            <Link
+              href="/emergency"
+              className="inline-flex items-center gap-2 mt-6 bg-red-600/90 backdrop-blur text-white px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-red-700 transition-all active:scale-95"
+            >
+              <span className="material-symbols-outlined text-lg">sos</span>
+              Emergency Help Now
+            </Link>
           </div>
         </section>
 
@@ -254,17 +242,17 @@ export default function HomePage() {
               <h5 className="font-bold text-primary mb-6">Company</h5>
               <ul className="space-y-4 text-sm text-on-surface-variant">
                 <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
+                  <Link href="/services" className="hover:text-primary transition-colors">
                     Our Standard
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
+                  <Link href="/join" className="hover:text-primary transition-colors">
                     Membership
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
+                  <Link href="/discover" className="hover:text-primary transition-colors">
                     The Journal
                   </Link>
                 </li>
@@ -282,24 +270,19 @@ export default function HomePage() {
               <h5 className="font-bold text-primary mb-6">Connect</h5>
               <ul className="space-y-4 text-sm text-on-surface-variant">
                 <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
+                  <Link href="/join" className="hover:text-primary transition-colors">
                     Support
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
-                    Instagram
-                  </Link>
+                  <span className="text-outline/40 cursor-default">
+                    Instagram — Coming Soon
+                  </span>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
-                    LinkedIn
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-primary transition-colors">
-                    Press Office
-                  </Link>
+                  <span className="text-outline/40 cursor-default">
+                    LinkedIn — Coming Soon
+                  </span>
                 </li>
               </ul>
             </div>
@@ -307,9 +290,9 @@ export default function HomePage() {
           <div className="pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60">
             <p>&copy; 2024 DOCKSIDE BLACKBOOK. ALL RIGHTS RESERVED.</p>
             <div className="flex gap-8">
-              <Link href="#">Privacy</Link>
-              <Link href="#">Terms</Link>
-              <Link href="#">Cookies</Link>
+              <span>Privacy</span>
+              <span>Terms</span>
+              <span>Cookies</span>
             </div>
           </div>
         </footer>

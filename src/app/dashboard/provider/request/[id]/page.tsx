@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import NavWrapper from "@/components/NavWrapper";
 import {
   getRequestById,
   getProviderForUser,
@@ -49,10 +48,7 @@ export default async function RequestDetailPage({
     : [];
 
   return (
-    <>
-      <NavWrapper />
-
-      <main className="pt-24 pb-40 px-4 md:px-8 max-w-4xl mx-auto">
+    <main className="px-4 md:px-8 max-w-4xl mx-auto">
         {/* Back button */}
         <Link
           href="/dashboard/provider"
@@ -297,8 +293,6 @@ export default async function RequestDetailPage({
           providerId={provider.id}
           currency={request.currency}
         />
-      </main>
-
-    </>
+    </main>
   );
 }

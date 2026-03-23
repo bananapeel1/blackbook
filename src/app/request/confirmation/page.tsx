@@ -5,6 +5,7 @@ import Link from 'next/link';
 import TopAppBar from '@/components/TopAppBar';
 import ConciergeFAB from '@/components/ConciergeFAB';
 import { useRequestForm } from '@/lib/request-context';
+import { createClient } from '@/lib/supabase/client';
 
 export default function RequestConfirmationPage() {
   const { formData, resetFormData } = useRequestForm();
@@ -15,6 +16,55 @@ export default function RequestConfirmationPage() {
     setShowConfetti(true);
     const timer = setTimeout(() => setShowConfetti(false), 4000);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Recover pending request from localStorage after login redirect
+  useEffect(() => {
+    async function recoverPendingRequest() {
+      const pending = localStorage.getItem('pending_service_request');
+      if (!pending) return;
+
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      try {
+        const parsed = JSON.parse(pending);
+        // The payload from step-4 is already mapped to DB columns,
+        // just add the user_id
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error: insertError } = await (supabase as any)
+          .from('service_requests')
+          .insert({
+            category_id: parsed.category_id || null,
+            location_id: parsed.location_id || null,
+            vessel_id: parsed.vessel_id || null,
+            title: parsed.title || 'Service request',
+            description: parsed.description || null,
+            urgency: parsed.urgency || 'standard',
+            preferred_date: parsed.preferred_date || null,
+            preferred_time: parsed.preferred_time || null,
+            flexible_dates: parsed.flexible_dates ?? false,
+            budget_min: parsed.budget_min ?? null,
+            budget_max: parsed.budget_max ?? null,
+            location_name: parsed.location_name || null,
+            location_lat: parsed.location_lat ?? null,
+            location_lng: parsed.location_lng ?? null,
+            berth_info: parsed.berth_info || null,
+            attachments: parsed.attachments || [],
+            status: 'submitted',
+            user_id: user.id,
+          });
+
+        if (!insertError) {
+          localStorage.removeItem('pending_service_request');
+        }
+      } catch {
+        // Silently fail - user can still see the confirmation page
+      }
+    }
+
+    recoverPendingRequest();
   }, []);
 
   // Store summary before reset

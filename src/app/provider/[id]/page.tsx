@@ -57,13 +57,33 @@ export default async function ProviderProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const supabase = await createClient();
   const provider = await getProvider(id);
-
-  // Contact masking: default to locked until RPC function is deployed
-  if (provider) provider.contact_unlocked = false;
 
   if (!provider) {
     notFound();
+  }
+
+  // Check if current user has an accepted quote with this provider
+  let contactUnlocked = false;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { data: userRequests } = await supabase
+      .from('service_requests')
+      .select('id')
+      .eq('user_id', user.id);
+
+    if (userRequests && userRequests.length > 0) {
+      const requestIds = userRequests.map((r: { id: string }) => r.id);
+      const { data: acceptedQuotes } = await supabase
+        .from('quotes')
+        .select('id')
+        .eq('provider_id', provider.id)
+        .eq('status', 'accepted')
+        .in('request_id', requestIds)
+        .limit(1);
+      contactUnlocked = (acceptedQuotes?.length ?? 0) > 0;
+    }
   }
 
   const isVerified =
@@ -269,7 +289,7 @@ export default async function ProviderProfilePage({
               )}
 
               {/* Contact masking - locked state */}
-              {provider.contact_unlocked ? (
+              {contactUnlocked ? (
                 <div className="mt-4 space-y-3 pt-4 border-t border-outline-variant/10">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="material-symbols-outlined text-green-600 text-sm" style={{fontVariationSettings: "'FILL' 1"}}>lock_open</span>

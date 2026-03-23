@@ -12,16 +12,15 @@ const ownerItems = [
   { href: "/", icon: "anchor", label: "Home" },
   { href: "/discover", icon: "explore", label: "Discover" },
   { href: "/request", icon: "add_circle", label: "Request" },
-  { href: "/messages", icon: "chat", label: "Messages" },
+  { href: "/blackbook", icon: "bookmark", label: "Blackbook" },
   { href: "/dashboard", icon: "dashboard", label: "Dashboard" },
 ];
 
 const providerItems = [
   { href: "/", icon: "anchor", label: "Home" },
-  { href: "/discover", icon: "explore", label: "Discover" },
-  { href: "/dashboard/provider", icon: "dashboard", label: "Inbox" },
+  { href: "/dashboard/provider", icon: "inbox", label: "Inbox" },
   { href: "/messages", icon: "chat", label: "Messages" },
-  { href: "/dashboard/provider", icon: "settings", label: "Settings" },
+  { href: "/dashboard/provider/settings", icon: "settings", label: "Settings" },
 ];
 
 const guestItems = [

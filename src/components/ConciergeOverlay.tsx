@@ -125,8 +125,11 @@ export default function ConciergeOverlay({
               <h3 className="font-[family-name:var(--font-headline)] italic text-sm text-primary font-semibold">
                 AI Concierge
               </h3>
-              <span className="text-[10px] text-on-surface-variant">
+              <span className="text-[10px] text-on-surface-variant flex items-center gap-2">
                 Maritime Intelligence
+                <span className="bg-tertiary-container text-on-tertiary-container text-[8px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                  Demo
+                </span>
               </span>
             </div>
           </div>
