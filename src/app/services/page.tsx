@@ -89,9 +89,9 @@ export default function ServicesPage() {
         </section>
 
         {/* Bento Grid Services */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 stagger-children">
           {/* Private Chef - Main Feature */}
-          <div className="md:col-span-8 group relative overflow-hidden rounded-xl bg-primary-container min-h-[500px] flex items-end">
+          <div className="md:col-span-8 group relative overflow-hidden rounded-xl bg-primary-container min-h-[500px] flex items-end card-hover">
             <img
               src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80"
               alt=""
@@ -122,7 +122,7 @@ export default function ServicesPage() {
           </div>
 
           {/* Custom Provisions */}
-          <div className="md:col-span-4 group relative overflow-hidden rounded-xl min-h-[500px] flex flex-col">
+          <div className="md:col-span-4 group relative overflow-hidden rounded-xl min-h-[500px] flex flex-col card-hover">
             <div className="h-1/2 bg-surface-container-high relative overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&q=80"
@@ -153,7 +153,7 @@ export default function ServicesPage() {
           </div>
 
           {/* Floral Designs */}
-          <div className="md:col-span-5 group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-sm p-1">
+          <div className="md:col-span-5 group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-sm p-1 card-hover">
             <div className="aspect-[4/5] rounded-lg overflow-hidden relative bg-surface-container-high">
               <img
                 src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=80"
@@ -181,7 +181,7 @@ export default function ServicesPage() {
           {/* Transport Grid */}
           <div className="md:col-span-7 grid grid-rows-2 gap-6">
             {/* Air & Sea Transfers */}
-            <div className="bg-surface-container-low rounded-xl overflow-hidden flex items-stretch">
+            <div className="bg-surface-container-low rounded-xl overflow-hidden flex items-stretch card-hover">
               <div className="w-1/3 bg-surface-container-high relative overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80"
@@ -215,7 +215,7 @@ export default function ServicesPage() {
             </div>
 
             {/* Chauffeur */}
-            <div className="group relative overflow-hidden rounded-xl bg-primary">
+            <div className="group relative overflow-hidden rounded-xl bg-primary card-hover">
               <img
                 src="https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=800&q=80"
                 alt=""

@@ -41,7 +41,7 @@ export default function BottomNav({ user }: { user?: BottomNavUser | null }) {
     : guestItems;
 
   return (
-    <nav className="md:hidden fixed bottom-0 w-full z-50 pb-safe bg-slate-50/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(0,33,71,0.08)]">
+    <nav data-nav="bottom" className="md:hidden fixed bottom-0 w-full z-50 pb-safe bg-slate-50/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(0,33,71,0.08)]">
       <div className="flex justify-around items-center h-20 px-2 w-full">
         {navItems.map((item) => {
           const isActive =

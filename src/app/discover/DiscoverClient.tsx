@@ -189,7 +189,7 @@ export default function DiscoverClient({
         </div>
       ) : (
         /* Provider List */
-        <div className="space-y-6">
+        <div className="space-y-6 stagger-children">
           {filteredProviders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <span className="material-symbols-outlined text-on-surface-variant text-4xl mb-4">
@@ -225,7 +225,7 @@ export default function DiscoverClient({
                 <Link
                   key={provider.id}
                   href={`/provider/${provider.slug}`}
-                  className="group relative bg-surface-container-low rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-500 hover:shadow-2xl hover:shadow-primary-container/5 block"
+                  className="group relative bg-surface-container-low rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-500 hover:shadow-2xl hover:shadow-primary-container/5 block card-hover"
                 >
                   <div className="w-full md:w-72 h-48 md:h-auto overflow-hidden relative bg-primary-container/20">
                     {isPremium && (

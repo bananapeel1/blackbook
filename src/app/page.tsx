@@ -75,7 +75,7 @@ export default function HomePage() {
             <HeroSearch />
             <Link
               href="/emergency"
-              className="inline-flex items-center gap-2 mt-6 bg-red-600/90 backdrop-blur text-white px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-red-700 transition-all active:scale-95"
+              className="inline-flex items-center gap-2 mt-6 bg-red-600/90 backdrop-blur text-white px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-red-700 transition-all active:scale-95 btn-press"
             >
               <span className="material-symbols-outlined text-lg">sos</span>
               Emergency Help Now
@@ -110,7 +110,7 @@ export default function HomePage() {
                 <Link
                   key={cat.title}
                   href="/services"
-                  className={`${cat.span} group relative overflow-hidden rounded-xl bg-surface-container-low min-h-[250px]`}
+                  className={`${cat.span} group relative overflow-hidden rounded-xl bg-surface-container-low min-h-[250px] card-hover`}
                 >
                   <div className="absolute inset-0 bg-primary-container" />
                   <img
@@ -186,7 +186,7 @@ export default function HomePage() {
                 prestigious ports.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 stagger-children">
               {journalPosts.map((post) => (
                 <article key={post.title} className="group cursor-pointer">
                   <div className="aspect-[4/5] overflow-hidden rounded-xl mb-6 bg-primary-container/20" />

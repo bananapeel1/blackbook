@@ -184,7 +184,7 @@ export default function EmergencyClient({
           </span>
           I need help with:
         </label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 stagger-children">
           {emergencyCategories.map((cat) => {
             const isSelected = selectedLabel === cat.label;
             return (
@@ -340,7 +340,7 @@ export default function EmergencyClient({
         type="button"
         disabled={submitting}
         onClick={handleSubmit}
-        className="w-full bg-error text-on-error px-8 py-4 rounded-xl text-sm font-bold uppercase tracking-wider hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full bg-error text-on-error px-8 py-4 rounded-xl text-sm font-bold uppercase tracking-wider hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed btn-press"
       >
         {submitting ? (
           <>

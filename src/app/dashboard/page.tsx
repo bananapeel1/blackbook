@@ -181,7 +181,7 @@ export default async function DashboardPage() {
                 </Link>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4 stagger-children">
                 {activeRequests.map((request: any) => {
                   const status = statusConfig[request.status] ??
                     statusConfig.submitted;
@@ -191,7 +191,7 @@ export default async function DashboardPage() {
                     <Link
                       key={request.id}
                       href={`/quotes/${request.id}`}
-                      className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-container-high transition-colors group"
+                      className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-container-high transition-colors group card-hover"
                     >
                       <div className="bg-secondary-container w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
                         <span className="material-symbols-outlined text-primary text-2xl">
@@ -374,7 +374,7 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               <Link
                 href="/request"
-                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
+                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group card-hover"
               >
                 <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
                   <span className="material-symbols-outlined text-primary text-2xl">
@@ -390,7 +390,7 @@ export default async function DashboardPage() {
               </Link>
               <Link
                 href="/discover"
-                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
+                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group card-hover"
               >
                 <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
                   <span className="material-symbols-outlined text-primary text-2xl">
@@ -406,7 +406,7 @@ export default async function DashboardPage() {
               </Link>
               <Link
                 href="/messages"
-                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
+                className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group card-hover"
               >
                 <div className="w-14 h-14 rounded-full bg-secondary-container mx-auto mb-3 flex items-center justify-center">
                   <span className="material-symbols-outlined text-primary text-2xl">

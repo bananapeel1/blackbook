@@ -62,7 +62,7 @@ export default function TopAppBar({ user }: { user?: NavUser | null }) {
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200/20 h-16 flex justify-between items-center px-6 transition-shadow duration-300 ${
+      className={`fixed top-0 w-full z-50 glass-effect border-b border-slate-200/20 h-16 flex justify-between items-center px-6 transition-shadow duration-300 ${
         scrolled ? "shadow-lg" : "shadow-sm"
       }`}
     >
@@ -72,7 +72,7 @@ export default function TopAppBar({ user }: { user?: NavUser | null }) {
         </span>
         <Link
           href="/"
-          className="font-[family-name:var(--font-headline)] font-bold text-slate-900 tracking-tighter text-xl md:text-2xl"
+          className="font-[family-name:var(--font-headline)] font-bold text-slate-900 tracking-tighter text-xl md:text-2xl gold-text"
         >
           Dockside Blackbook
         </Link>

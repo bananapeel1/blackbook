@@ -254,7 +254,7 @@ export default function RequestStep1Page() {
                 <h2 className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3">
                   {segmentLabels[segment]}
                 </h2>
-                <div className="grid grid-cols-2 gap-3 mb-2">
+                <div className="grid grid-cols-2 gap-3 mb-2 stagger-children">
                   {grouped[segment].map((cat) => {
                     const isActive = formData.categoryId === cat.id;
                     return (
@@ -383,7 +383,7 @@ export default function RequestStep1Page() {
             type="button"
             disabled={!canProceed}
             onClick={() => router.push('/request/step-2')}
-            className={`px-8 py-3 rounded-xl text-sm font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center gap-2 ${
+            className={`px-8 py-3 rounded-xl text-sm font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center gap-2 btn-press ${
               canProceed
                 ? 'bg-primary text-on-primary hover:opacity-90'
                 : 'bg-outline-variant/30 text-on-surface-variant cursor-not-allowed'

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Serif, Inter } from "next/font/google";
 import { ToastProvider } from "@/lib/toast-context";
+import ThemeProvider from "@/components/ThemeProvider";
 import "./globals.css";
 
 const notoSerif = Noto_Serif({
@@ -45,7 +46,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-dvh flex flex-col bg-background text-on-surface font-body antialiased">
-        <ToastProvider>{children}</ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

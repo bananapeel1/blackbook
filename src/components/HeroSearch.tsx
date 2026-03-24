@@ -34,7 +34,7 @@ export default function HeroSearch() {
       </div>
       <button
         type="submit"
-        className="bg-primary text-on-primary px-8 py-4 rounded-lg uppercase tracking-widest text-xs font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2"
+        className="bg-primary text-on-primary px-8 py-4 rounded-lg uppercase tracking-widest text-xs font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 btn-press"
       >
         Search Port
         <span className="material-symbols-outlined text-sm">

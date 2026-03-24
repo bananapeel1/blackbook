@@ -132,3 +132,197 @@ h1, h2, h3 {
     transform: translateX(0);
   }
 }
+
+/* === Superyacht Theme === */
+[data-theme="superyacht"] {
+  /* Primary — Navy + Gold */
+  --color-primary: #0a1628;
+  --color-primary-container: #1a2940;
+  --color-primary-fixed: #e8d5a0;
+  --color-primary-fixed-dim: #c5a44e;
+  --color-on-primary: #e8d5a0;
+  --color-on-primary-container: #c5a44e;
+  --color-on-primary-fixed: #0a1628;
+  --color-on-primary-fixed-variant: #2d3a4f;
+  --color-inverse-primary: #c5a44e;
+
+  /* Secondary — Warm slate */
+  --color-secondary: #3a3a40;
+  --color-secondary-container: #2a2a30;
+  --color-secondary-fixed: #3a3a40;
+  --color-secondary-fixed-dim: #2a2a30;
+  --color-on-secondary: #e0d8cc;
+  --color-on-secondary-container: #c5a44e;
+  --color-on-secondary-fixed: #e0d8cc;
+  --color-on-secondary-fixed-variant: #8a7a5a;
+
+  /* Tertiary — Champagne */
+  --color-tertiary: #1a1510;
+  --color-tertiary-container: #2a2520;
+  --color-tertiary-fixed: #d4c8a8;
+  --color-tertiary-fixed-dim: #b8a878;
+  --color-on-tertiary: #e0d8cc;
+  --color-on-tertiary-container: #c5a44e;
+  --color-on-tertiary-fixed: #1a1510;
+  --color-on-tertiary-fixed-variant: #5a5040;
+
+  /* Surface — Dark navy backgrounds */
+  --color-surface: #0d1825;
+  --color-surface-bright: #1a2940;
+  --color-surface-dim: #080e18;
+  --color-surface-variant: #1a2535;
+  --color-surface-tint: #c5a44e;
+  --color-surface-container: #111e2e;
+  --color-surface-container-low: #0f1a28;
+  --color-surface-container-high: #162336;
+  --color-surface-container-highest: #1d2e42;
+  --color-surface-container-lowest: #0a1420;
+  --color-background: #0a1420;
+  --color-on-surface: #e8e0d4;
+  --color-on-surface-variant: #9a9490;
+  --color-on-background: #e8e0d4;
+  --color-inverse-surface: #e8e0d4;
+  --color-inverse-on-surface: #0a1628;
+
+  /* Error */
+  --color-error: #ff6b6b;
+  --color-error-container: #3a1a1a;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #ff6b6b;
+
+  /* Outline */
+  --color-outline: #4a4a55;
+  --color-outline-variant: #2a2a35;
+
+  /* Font override — more editorial */
+  --font-headline: "Noto Serif", serif;
+}
+
+/* Superyacht-specific glass effect */
+[data-theme="superyacht"] .glass-effect {
+  background: rgba(10, 20, 32, 0.85);
+  border: 1px solid rgba(197, 164, 78, 0.1);
+}
+
+[data-theme="superyacht"] .glass-card {
+  background: rgba(17, 30, 46, 0.8);
+  border: 1px solid rgba(197, 164, 78, 0.08);
+}
+
+[data-theme="superyacht"] .ledger-shadow {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Superyacht bottom nav */
+[data-theme="superyacht"] nav[data-nav="bottom"] {
+  background: rgba(10, 20, 32, 0.92) !important;
+  border-top-color: rgba(197, 164, 78, 0.15) !important;
+}
+
+/* === Animations === */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out both;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Staggered children animations */
+.stagger-children > * {
+  animation: fadeInUp 0.4s ease-out both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+
+/* Card hover interactions */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+[data-theme="superyacht"] .card-hover:hover {
+  box-shadow: 0 8px 24px rgba(197, 164, 78, 0.08);
+}
+
+/* Button press */
+.btn-press {
+  transition: transform 0.1s ease;
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Skeleton loader */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-surface-container-low) 25%, var(--color-surface-container-high) 50%, var(--color-surface-container-low) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Smooth page transitions */
+main {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Superyacht gold gradient text */
+[data-theme="superyacht"] .gold-text {
+  background: linear-gradient(135deg, #c5a44e 0%, #e8d5a0 50%, #c5a44e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Superyacht gold border glow */
+[data-theme="superyacht"] .gold-glow {
+  box-shadow: 0 0 20px rgba(197, 164, 78, 0.15);
+  border: 1px solid rgba(197, 164, 78, 0.2);
+}
