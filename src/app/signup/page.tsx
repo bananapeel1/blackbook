@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
-type UserRole = "boat_owner" | "service_provider";
+type UserRole = "boat_owner" | "charter_skipper" | "service_provider";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -219,7 +219,7 @@ export default function SignupPage() {
               <label className="block text-sm font-medium text-on-surface-variant mb-3">
                 I am a...
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <button
                   type="button"
                   onClick={() => setSelectedRole("boat_owner")}
@@ -229,23 +229,28 @@ export default function SignupPage() {
                       : "border-outline-variant/20 bg-surface-container-low hover:border-outline-variant/40"
                   }`}
                 >
-                  <span
-                    className={`material-symbols-outlined text-3xl mb-2 ${
-                      selectedRole === "boat_owner"
-                        ? "text-primary"
-                        : "text-on-surface-variant/60"
-                    }`}
-                  >
+                  <span className={`material-symbols-outlined text-2xl mb-2 ${selectedRole === "boat_owner" ? "text-primary" : "text-on-surface-variant/60"}`}>
                     sailing
                   </span>
-                  <p
-                    className={`text-sm font-medium ${
-                      selectedRole === "boat_owner"
-                        ? "text-primary"
-                        : "text-on-surface"
-                    }`}
-                  >
-                    Boat Owner / Captain
+                  <p className={`text-xs font-medium ${selectedRole === "boat_owner" ? "text-primary" : "text-on-surface"}`}>
+                    Boat Owner
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole("charter_skipper")}
+                  className={`p-4 rounded-xl border-2 text-center transition-all ${
+                    selectedRole === "charter_skipper"
+                      ? "border-primary bg-primary-fixed/10"
+                      : "border-outline-variant/20 bg-surface-container-low hover:border-outline-variant/40"
+                  }`}
+                >
+                  <span className={`material-symbols-outlined text-2xl mb-2 ${selectedRole === "charter_skipper" ? "text-primary" : "text-on-surface-variant/60"}`}>
+                    captain
+                  </span>
+                  <p className={`text-xs font-medium ${selectedRole === "charter_skipper" ? "text-primary" : "text-on-surface"}`}>
+                    Charter Skipper
                   </p>
                 </button>
 
@@ -258,22 +263,10 @@ export default function SignupPage() {
                       : "border-outline-variant/20 bg-surface-container-low hover:border-outline-variant/40"
                   }`}
                 >
-                  <span
-                    className={`material-symbols-outlined text-3xl mb-2 ${
-                      selectedRole === "service_provider"
-                        ? "text-primary"
-                        : "text-on-surface-variant/60"
-                    }`}
-                  >
+                  <span className={`material-symbols-outlined text-2xl mb-2 ${selectedRole === "service_provider" ? "text-primary" : "text-on-surface-variant/60"}`}>
                     engineering
                   </span>
-                  <p
-                    className={`text-sm font-medium ${
-                      selectedRole === "service_provider"
-                        ? "text-primary"
-                        : "text-on-surface"
-                    }`}
-                  >
+                  <p className={`text-xs font-medium ${selectedRole === "service_provider" ? "text-primary" : "text-on-surface"}`}>
                     Service Provider
                   </p>
                 </button>

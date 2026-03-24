@@ -61,6 +61,18 @@ const segmentLabels: Record<string, string> = {
   premium: 'Premium & Lifestyle',
 };
 
+function getTimeUntilArrival(date: string, time: string): string {
+  const arrival = new Date(`${date}T${time || '12:00'}`);
+  const now = new Date();
+  const diff = arrival.getTime() - now.getTime();
+  if (diff < 0) return 'Already arrived';
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  if (days > 0) return `${days} day${days > 1 ? 's' : ''}, ${hours} hour${hours > 1 ? 's' : ''}`;
+  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
+  return 'Less than an hour';
+}
+
 export default function RequestStep1Page() {
   const router = useRouter();
   const { formData, updateFormData } = useRequestForm();
@@ -135,11 +147,95 @@ export default function RequestStep1Page() {
 
         {/* Section Title */}
         <h1 className="font-[family-name:var(--font-headline)] text-3xl font-bold text-primary tracking-tight mb-2">
-          What do you need?
+          Plan your arrival
         </h1>
         <p className="text-on-surface-variant text-sm mb-8">
-          Select the type of service and describe your requirements.
+          Tell us when you&apos;re arriving and what you need arranged.
         </p>
+
+        {/* When are you arriving? */}
+        <h2 className="text-lg font-bold text-on-surface mb-3 flex items-center gap-2">
+          <span className="material-symbols-outlined text-primary">flight_land</span>
+          When are you arriving?
+        </h2>
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="text-sm font-semibold text-on-surface block mb-2">
+              Preferred Date
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">
+                calendar_today
+              </span>
+              <input
+                type="date"
+                value={formData.preferredDate}
+                onChange={(e) => updateFormData({ preferredDate: e.target.value })}
+                className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl pl-10 pr-4 py-3 text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-semibold text-on-surface block mb-2">
+              Preferred Time
+            </label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">
+                schedule
+              </span>
+              <input
+                type="time"
+                value={formData.preferredTime}
+                onChange={(e) => updateFormData({ preferredTime: e.target.value })}
+                className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl pl-10 pr-4 py-3 text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Flexible Dates Toggle */}
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => updateFormData({ flexibleDates: !formData.flexibleDates })}
+            className="flex items-center gap-3 text-sm"
+          >
+            <div
+              className={`w-10 h-6 rounded-full transition-all duration-200 flex items-center px-0.5 ${
+                formData.flexibleDates ? 'bg-primary' : 'bg-outline-variant/40'
+              }`}
+            >
+              <div
+                className={`w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${
+                  formData.flexibleDates ? 'translate-x-4' : 'translate-x-0'
+                }`}
+              />
+            </div>
+            <span className="text-on-surface font-medium">Flexible dates</span>
+          </button>
+        </div>
+
+        {/* ETA Countdown */}
+        {formData.preferredDate && (
+          <div className="bg-primary-container rounded-xl p-4 flex items-center gap-3 mb-8">
+            <span className="material-symbols-outlined text-primary text-2xl">schedule</span>
+            <div>
+              <p className="text-sm font-bold text-on-primary-container">
+                Arriving in {getTimeUntilArrival(formData.preferredDate, formData.preferredTime)}
+              </p>
+              <p className="text-xs text-on-primary-container/70">
+                Providers will prioritise based on your arrival window
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* What do you need? */}
+        <h2 className="text-lg font-bold text-on-surface mb-3 flex items-center gap-2">
+          <span className="material-symbols-outlined text-primary">category</span>
+          What do you need?
+        </h2>
 
         {/* Service Type Grid - grouped by segment */}
         {loading ? (
@@ -271,63 +367,6 @@ export default function RequestStep1Page() {
           </div>
         </div>
 
-        {/* Date & Time */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="text-sm font-semibold text-on-surface block mb-2">
-              Preferred Date
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">
-                calendar_today
-              </span>
-              <input
-                type="date"
-                value={formData.preferredDate}
-                onChange={(e) => updateFormData({ preferredDate: e.target.value })}
-                className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl pl-10 pr-4 py-3 text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-on-surface block mb-2">
-              Preferred Time
-            </label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">
-                schedule
-              </span>
-              <input
-                type="time"
-                value={formData.preferredTime}
-                onChange={(e) => updateFormData({ preferredTime: e.target.value })}
-                className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl pl-10 pr-4 py-3 text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Flexible Dates Toggle */}
-        <div className="mb-8">
-          <button
-            type="button"
-            onClick={() => updateFormData({ flexibleDates: !formData.flexibleDates })}
-            className="flex items-center gap-3 text-sm"
-          >
-            <div
-              className={`w-10 h-6 rounded-full transition-all duration-200 flex items-center px-0.5 ${
-                formData.flexibleDates ? 'bg-primary' : 'bg-outline-variant/40'
-              }`}
-            >
-              <div
-                className={`w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${
-                  formData.flexibleDates ? 'translate-x-4' : 'translate-x-0'
-                }`}
-              />
-            </div>
-            <span className="text-on-surface font-medium">Flexible dates</span>
-          </button>
-        </div>
       </main>
 
       {/* Fixed Bottom Bar */}

@@ -15,6 +15,18 @@ function formatTimeAgo(dateStr: string) {
   return `${days}d ago`;
 }
 
+function getTimeUntilArrival(date: string, time?: string): string {
+  const arrival = new Date(`${date}T${time || '12:00'}`);
+  const now = new Date();
+  const diff = arrival.getTime() - now.getTime();
+  if (diff < 0) return 'Already arrived';
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  if (days > 0) return `${days} day${days > 1 ? 's' : ''}, ${hours} hour${hours > 1 ? 's' : ''}`;
+  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
+  return 'Less than an hour';
+}
+
 function formatCurrency(amount: number, currency: string) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -234,6 +246,12 @@ export default async function ProviderDashboardPage() {
                           {request.urgency === "priority" && (
                             <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
                               Urgent
+                            </span>
+                          )}
+                          {request.preferred_date && (
+                            <span className="text-xs text-amber-600 font-semibold flex items-center gap-1">
+                              <span className="material-symbols-outlined text-sm">schedule</span>
+                              {getTimeUntilArrival(request.preferred_date, request.preferred_time)}
                             </span>
                           )}
                         </div>

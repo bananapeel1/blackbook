@@ -6,6 +6,24 @@ import {
   getConversationsForUser,
 } from "@/lib/supabase/queries";
 
+function getMaterialIcon(icon: string | null): string {
+  const map: Record<string, string> = {
+    wrench: 'build', zap: 'bolt', anchor: 'anchor', fuel: 'local_gas_station',
+    'shopping-cart': 'local_shipping', car: 'directions_car', sparkles: 'auto_awesome',
+    'chef-hat': 'restaurant', camera: 'photo_camera', flower: 'local_florist',
+    droplets: 'water_drop', paintbrush: 'brush', glasses: 'scuba_diving',
+    wind: 'air', package: 'inventory_2', 'shopping-bag': 'shopping_bag',
+    thermometer: 'thermostat', battery: 'power', snowflake: 'ac_unit',
+    droplet: 'water_drop', palette: 'palette', shirt: 'dry_cleaning',
+    flame: 'local_fire_department', 'trash-2': 'delete_sweep',
+    'file-text': 'description', 'life-buoy': 'support',
+    'party-popper': 'celebration', music: 'music_note', sparkle: 'auto_awesome',
+    utensils: 'restaurant_menu', shield: 'shield', heart: 'spa',
+    crown: 'diamond', star: 'concierge',
+  };
+  return icon ? (map[icon] ?? 'handyman') : 'handyman';
+}
+
 function formatTimeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const minutes = Math.floor(diff / 60000);
@@ -84,6 +102,45 @@ export default async function DashboardPage() {
             Welcome, Captain
           </h1>
         </div>
+
+        {/* Quick Repeat — Recent Requests */}
+        {requests.filter((r: any) => r.status === 'completed' || r.status === 'submitted').length > 0 && (
+          <section className="mb-10">
+            <h2 className="font-[family-name:var(--font-headline)] text-lg font-bold text-primary mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-xl">replay</span>
+              Quick Repeat
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {requests
+                .filter((r: any) => r.status === 'completed' || r.status === 'submitted')
+                .slice(0, 4)
+                .map((req: any) => (
+                  <Link
+                    key={`repeat-${req.id}`}
+                    href={`/request?repeat=${req.id}`}
+                    className="flex items-center gap-4 bg-surface-container-low rounded-xl p-4 border border-outline-variant/10 hover:bg-surface-container-high transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center flex-shrink-0">
+                      <span className="material-symbols-outlined text-on-primary-container text-lg">
+                        {getMaterialIcon(req.category?.icon ?? null)}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-on-surface truncate">
+                        {req.title || req.category?.name || 'Service request'}
+                      </p>
+                      <p className="text-xs text-on-surface-variant truncate">
+                        {req.location?.name || 'No location'}
+                      </p>
+                    </div>
+                    <span className="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                      arrow_forward
+                    </span>
+                  </Link>
+                ))}
+            </div>
+          </section>
+        )}
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -314,7 +371,7 @@ export default async function DashboardPage() {
                 <span className="material-symbols-outlined text-sm">east</span>
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               <Link
                 href="/request"
                 className="bg-surface-container-lowest rounded-xl p-5 text-center hover:shadow-lg hover:shadow-primary-container/10 transition-all group"
@@ -364,6 +421,18 @@ export default async function DashboardPage() {
                 </p>
               </Link>
             </div>
+            <Link
+              href="/request/turnaround"
+              className="flex items-center gap-4 bg-tertiary-fixed/20 rounded-xl p-4 border border-tertiary-fixed/30 hover:bg-tertiary-fixed/30 transition-all"
+            >
+              <div className="w-10 h-10 rounded-lg bg-tertiary-fixed flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-tertiary-fixed text-lg">sync</span>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-on-surface">Charter Turnaround</p>
+                <p className="text-xs text-on-surface-variant">Bulk request for guest changeover</p>
+              </div>
+            </Link>
           </div>
         </div>
       </main>
