@@ -1,6 +1,7 @@
 -- =============================================================================
 -- BlackBook - Cyprus Real Provider & Marina Data
 -- Source: Web research March 2026
+-- Safe to re-run: all INSERTs use ON CONFLICT DO NOTHING
 -- =============================================================================
 
 -- =============================================================================
@@ -97,7 +98,8 @@ INSERT INTO locations (id, name, slug, country, region, latitude, longitude, typ
    '{"restaurant"}',
    NULL, 3.5, 30.0, 240, NULL,
    '{"fisheries_dept": "+357 22 807 807", "email": "dfmr@dfmr.moa.gov.cy"}',
-   'Fishing boats have priority. Berth applications processed through DFMR. Cannot check in/out here.');
+   'Fishing boats have priority. Berth applications processed through DFMR. Cannot check in/out here.')
+ON CONFLICT (slug) DO NOTHING;
 
 
 -- =============================================================================
@@ -117,42 +119,48 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Multimarine Shipyards', 'multimarine-shipyards',
    'Major shipyard at Limassol Port with 120m floating dry dock. Drydocking, ship repair, superyacht refit, afloat repairs. 24/7 yacht agency for all superyachts visiting Cyprus. 35+ years experience.',
    'info@multimarine.com.cy', '+357 25 336520', NULL, 'https://www.multimarine.com.cy/',
-   '{"English", "Greek", "Russian"}', 1988, 50, 'unverified', 'available', true);
+   '{"English", "Greek", "Russian"}', 1988, 50, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 -- Ocean Marine Equipment — chandlery + repair
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Ocean Marine Equipment', 'ocean-marine-equipment',
    'Marine equipment supplier and repair service in Limassol since 1990. Cosmetic repair, mechanical/electrical systems, fibreglass work, underwater care and yacht management.',
    'webenquiry@oceanmarine.com.cy', '+357 25 369731', NULL, 'http://www.oceanmarine.com.cy/',
-   '{"English", "Greek"}', 1990, 10, 'unverified', 'available', true);
+   '{"English", "Greek"}', 1990, 10, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 -- Golden Comet Marine — boat sales + workshop
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Golden Comet Marine', 'golden-comet-marine',
    'Established 1985 with 650sqm indoor workshop in Limassol. Dealers for Lagoon, Jeanneau, Prestige, Bayliner, Wellcraft, Four Winns. Full mechanical servicing and after-sales support.',
    'info@goldencomet.com', '+357 25 392 100', NULL, 'https://goldencomet.com',
-   '{"English", "Greek"}', 1985, 15, 'unverified', 'available', false);
+   '{"English", "Greek"}', 1985, 15, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- Nautimar Marine — refit management
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Nautimar Marine', 'nautimar-marine',
    'Operating from Limassol Marina since 1995. Refit management, owner''s rep services for craft up to 30m. Van der Valk, Sundeck, Invictus, Chaparral, Robalo dealer.',
    'info@nautimarmarine.com', '+357 2505 1210', NULL, 'https://nautimarmarine.com',
-   '{"English", "Greek"}', 1995, 8, 'unverified', 'available', false);
+   '{"English", "Greek"}', 1995, 8, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- C&R Motorboat Marine Services — engine specialists
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'C&R Motorboat Marine Services', 'cr-motorboat',
    'Engine repair, maintenance, antifouling and refurbishment specialists in the Protaras/Ayia Napa area. Authorised technicians for FPT, Mercury, Cummins Marine. Full engine diagnostics and boat storage.',
    'info@crmotorboat.com', '+357 23 824466', '+357 99 809588', 'https://www.crmotorboat.com/',
-   '{"English", "Greek"}', 2010, 6, 'unverified', 'available', true);
+   '{"English", "Greek"}', 2010, 6, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 -- A.K. Mediterranean Yachting
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'A.K. Mediterranean Yachting', 'ak-med-yachting',
    'Limassol Marina-based since 1997. Beneteau, Crownline, De Antonio dealer. Chandlery shop on-site. Sales, after-sales maintenance, winter storage and yacht management.',
    'info@yachtcyprus.com', '+357 25 63 63 73', NULL, 'https://yachtcyprus.com',
-   '{"English", "Greek", "Russian"}', 1997, 10, 'unverified', 'available', false);
+   '{"English", "Greek", "Russian"}', 1997, 10, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- MARINE ELECTRONICS
@@ -162,13 +170,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Damianou Marine Electronics', 'damianou-electronics',
    'Marine electronics sales, installation and repair in Larnaca. Navigation, communication, safety and entertainment systems. Echopilot distributor for Cyprus.',
    'damarine@damarine.com.cy', '+357 24 668668', NULL, 'https://damarine.com.cy',
-   '{"English", "Greek"}', 2000, 5, 'unverified', 'available', true);
+   '{"English", "Greek"}', 2000, 5, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'K.J. Electronics', 'kj-electronics',
    'Marine electronics repair, installation and sales in Larnaca. Exclusive distributor for Koden and Onwa navigation equipment. Serves cargo ships, fishing boats and yachts.',
    'info@kjelectronics.com.cy', '+357 24 636 360', NULL, 'https://www.kjelectronics.com.cy/',
-   '{"English", "Greek"}', 1995, 4, 'unverified', 'available', false);
+   '{"English", "Greek"}', 1995, 4, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- SAIL MAKERS & RIGGING
@@ -178,13 +188,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Kafetzidakis Sails', 'kafetzidakis-sails',
    'Sail construction, repair and maintenance since 1979. North Sails service point. Limassol loft. Reps for Selden Mast, MAX-PROP, RECKMANN, LEISURE FURL. Rigging, mast and cover work.',
    'info@kafetzidakis.gr', '+30 210 4137438', '+30 6948007239', 'https://www.kafetzidakis.gr/',
-   '{"English", "Greek"}', 1979, 6, 'unverified', 'available', false);
+   '{"English", "Greek"}', 1979, 6, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Sails Worx', 'sails-worx',
    'Larnaca-based sail loft for sail repairs, bimini tops, sprayhoods, boat covers and marine canvas work.',
    NULL, NULL, NULL, 'https://www.sailsworx.com/',
-   '{"English", "Greek"}', 2015, 3, 'unverified', 'available', false);
+   '{"English", "Greek"}', 2015, 3, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- PROVISIONING & CONCIERGE
@@ -194,13 +206,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'SEATRIP', 'seatrip-cyprus',
    'Full-service yacht operations based at Limassol Marina. Provisioning, yacht management, charter, cleaning, concierge and crew management. Covers Limassol, Larnaka, Ayia Napa, Pafos and Lachi.',
    'hello@seatrip.com', '+357 97 444344', '+357 99 024140', 'https://seatrip.com',
-   '{"English", "Greek", "Russian"}', 2018, 8, 'unverified', 'available', false);
+   '{"English", "Greek", "Russian"}', 2018, 8, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'BWA Yachting Cyprus', 'bwa-yachting-cyprus',
    'Part of global BWA network (750+ ports). Superyacht provisioning, agency, concierge and fuel bunkering. Fresh provisions delivered quayside or by tender. Duty-free fuel coordination, customs clearance, VIP concierge.',
    'cyprus@bwayachting.com', '+357 96 111551', NULL, 'https://bwayachting.com/our-locations/mediterranean/cyprus/',
-   '{"English", "Greek", "French", "Russian"}', 2016, 5, 'unverified', 'available', false);
+   '{"English", "Greek", "French", "Russian"}', 2016, 5, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- YACHT CLEANING & DETAILING
@@ -210,7 +224,8 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Diamantides Yachting', 'diamantides-yachting',
    'Specialist yacht interior/exterior cleaning and refinishing at Limassol Marina. Fabric, stone, wood, marble/granite polishing, gold/chrome plating. Also offers brokerage, charter, management and yacht registration services.',
    'info@diamantidesyachting.com', '+357 25 010 561', '+357 99 489 173', 'https://diamantidesyachting.com',
-   '{"English", "Greek"}', 2005, 6, 'unverified', 'available', false);
+   '{"English", "Greek"}', 2005, 6, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- MARINE SURVEYORS
@@ -220,13 +235,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'ILIC Enterprises', 'ilic-enterprises',
    'Ship and yacht surveys, valuations and inspections since 1927. P&I surveys, pre-purchase, damage assessment. Recognised by International Group of P&I Clubs. Limassol office.',
    NULL, '+357 25 34 85 68', NULL, 'https://www.ilicenterprises.com',
-   '{"English", "Greek"}', 1927, 5, 'unverified', 'available', false);
+   '{"English", "Greek"}', 1927, 5, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'CMT InterMarine Maritime Services', 'cmt-intermarine',
    'Marine surveying and technical consultancy in Limassol. Superyacht and yacht survey specialist. GRP/FRP condition monitoring, pre-purchase surveys, damage assessment.',
    'info@intermarine-surveyors.com', '+357 25 335089', '+357 99 206580', 'https://www.intermarine-surveyors.com/',
-   '{"English", "Greek"}', 2005, 4, 'unverified', 'available', false);
+   '{"English", "Greek"}', 2005, 4, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- YACHT AGENTS
@@ -236,13 +253,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Yacht Shore Premium Services', 'yacht-shore',
    'Elite yacht agency at Limassol Marina. Yacht management, concierge, crew recruitment, customs/immigration, provisioning, VIP transfers and event organising. Also at Larnaca and Ayia Napa marinas.',
    'info@yacht-shore.com', '+357 25 020 655', NULL, 'https://www.yacht-shore.com/',
-   '{"English", "Greek", "Russian", "French"}', 2015, 8, 'unverified', 'available', true);
+   '{"English", "Greek", "Russian", "French"}', 2015, 8, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Shoham (Cyprus)', 'shoham-cyprus',
    'Ship agency, port agency and freight forwarding with 60+ years experience. Serves ports of Limassol, Larnaca and Vassiliko. Crew changes, spares delivery, bunkering coordination.',
    'websales@shoham.com.cy', '+357 25 208700', NULL, 'https://shoham.com.cy/',
-   '{"English", "Greek", "Russian"}', 1960, 20, 'unverified', 'available', false);
+   '{"English", "Greek", "Russian"}', 1960, 20, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- FUEL / BUNKERING
@@ -252,13 +271,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Island Oil Limited', 'island-oil',
    'Marine fuel bunkering services in Limassol. Competitive pricing for diesel and marine gas oil delivery to berth.',
    NULL, '+357 25 88 90 00', NULL, NULL,
-   '{"English", "Greek"}', 2000, 10, 'unverified', 'available', false);
+   '{"English", "Greek"}', 2000, 10, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Helisea Bunkering', 'helisea-bunkering',
    'Yacht fuel bunkering across all Cyprus. Part of the Nemitsas Group. Competitive pricing, all-island coverage for diesel and petrol delivery.',
    NULL, NULL, NULL, 'https://helisea.nemitsas.eu/bunkering',
-   '{"English", "Greek"}', 2010, 8, 'unverified', 'available', false);
+   '{"English", "Greek"}', 2010, 8, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- DIVING SERVICES
@@ -268,7 +289,8 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Diving Status', 'diving-status',
    'Underwater hull cleaning, propeller polishing, underwater welding, in-water surveys. 40+ years experience, 6000+ contracts. Certified by ABS, Bureau Veritas, DNV-GL, Lloyds Register, RINA. 50+ employees. Limassol base.',
    NULL, '+357 25 03 03 19', NULL, 'https://www.divingstatus.com/',
-   '{"English", "Greek"}', 1984, 50, 'unverified', 'available', true);
+   '{"English", "Greek"}', 1984, 50, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- VIP TRANSFERS & TRANSPORT
@@ -278,13 +300,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Prestige VIP Services', 'prestige-vip',
    'VIP airport transfers, yacht charters with catering, private jet coordination and security services. Fleet includes Maserati, BMW, Mercedes, Bentley, Maybach, Land Rover. Based in Limassol.',
    NULL, '+357 25 322055', '+357 97 878004', 'https://www.prestigecy.com/',
-   '{"English", "Greek", "Russian", "French"}', 2010, 15, 'unverified', 'available', true);
+   '{"English", "Greek", "Russian", "French"}', 2010, 15, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Acropolis Vassos Taxi', 'acropolis-vassos',
    'VIP and executive transfers since 1941. Limousines, VIP chauffeur services, yacht charter support. Larnaca-based with pan-Cyprus coverage. 24/7 availability.',
    'info@acropolis-transport.com', '+357 24 622000', '+357 96 727135', 'https://www.acropolis-transport.com/',
-   '{"English", "Greek", "Russian", "German"}', 1941, 30, 'unverified', 'available', true);
+   '{"English", "Greek", "Russian", "German"}', 1941, 30, 'unverified', 'available', true)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- WATER TAXI
@@ -294,7 +318,8 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'SeaTaxi Cyprus', 'seataxi-cyprus',
    'First and only boat taxi service in Cyprus. Routes between Limassol Marina, beachfront hotels (Four Seasons, Amara, Parklane, St. Raphael) and Ladies Mile Beach. Up to 8 passengers. Base fare 50 EUR + 12 EUR/nm.',
    'info@seataxi.co', '+357 94 31000', NULL, 'https://seataxi.co/',
-   '{"English", "Greek"}', 2022, 4, 'unverified', 'available', false);
+   '{"English", "Greek"}', 2022, 4, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- YACHT MANAGEMENT
@@ -304,19 +329,22 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Hill Robinson Cyprus', 'hill-robinson-cy',
    'Global superyacht management leader. Cyprus office at Limassol Marina since 2015. Technical compliance, crewing, new build/refit project management. Chartered accountants on-site for fleet payment admin.',
    'cyprus@hillrobinson.com', '+357 25 025 750', NULL, 'https://hillrobinson.com',
-   '{"English", "Greek", "French", "Russian"}', 2015, 8, 'unverified', 'available', false);
+   '{"English", "Greek", "French", "Russian"}', 2015, 8, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'InterYachting Cyprus', 'interyachting-cyprus',
    'Yacht management, sales, charter and sailing school since 1996. Bavaria, Fountaine Pajot, Italia Yachts dealer. Offices at Limassol HQ, Old Port and Ayia Napa Marina.',
    'info@interyachting.com.cy', '+357 25 811900', '+357 99 404984', 'https://interyachting.com.cy/',
-   '{"English", "Greek", "Russian"}', 1996, 15, 'unverified', 'available', false);
+   '{"English", "Greek", "Russian"}', 1996, 15, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'Princess Yachts Cyprus', 'princess-yachts-cy',
    'Official Princess Yachts UK distributor since 1997. 25+ years in Cyprus. Sales, charter, management, crew placement, insurance and registration services.',
    'info@princessyachts.com.cy', '+357 25 770320', NULL, 'https://www.princessyachtscharter.eu/',
-   '{"English", "Greek", "Russian"}', 1997, 10, 'unverified', 'available', false);
+   '{"English", "Greek", "Russian"}', 1997, 10, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- YACHT BROKERAGE
@@ -326,13 +354,15 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'BP Yachting', 'bp-yachting',
    'Exclusive representative for Azimut/Benetti, Sea Ray, Elan in Cyprus. Offices in Limassol Marina, Larnaca, Ayia Napa and Beirut. Sales, charter and brokerage.',
    'sales@bpyachting.com', '+357 25 051234', NULL, 'https://www.bpyachting.com/',
-   '{"English", "Greek", "Arabic", "French"}', 2005, 12, 'unverified', 'available', false);
+   '{"English", "Greek", "Arabic", "French"}', 2005, 12, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO providers (id, user_id, business_name, slug, description, email, phone, whatsapp, website, languages, founded_year, team_size, verification_status, availability, emergency_available) VALUES
   (gen_random_uuid(), NULL, 'IYC Cyprus', 'iyc-cyprus',
    'Cyprus office of International Yacht Company — one of the world''s largest yacht sales and charter firms. 160+ professionals, 15 offices globally. Nicosia-based office.',
    'info@iyc.com', '+357 22 02 72 20', NULL, 'https://iyc.com/office/cyprus/',
-   '{"English", "Greek", "French", "Russian"}', 2018, 5, 'unverified', 'available', false);
+   '{"English", "Greek", "French", "Russian"}', 2018, 5, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- MARINE INSURANCE
@@ -342,7 +372,8 @@ INSERT INTO providers (id, user_id, business_name, slug, description, email, pho
   (gen_random_uuid(), NULL, 'Aphentrica Marine Insurance Brokers', 'aphentrica-marine',
    'Marine insurance specialists since 1994. Covers shipowners, operators, managers, cargo owners and yacht owners. Cyprus Shipping Chamber associate member. Limassol office.',
    'insurance@aphentrica.com', '+357 25 822 170', NULL, 'https://aphentrica.com/',
-   '{"English", "Greek"}', 1994, 8, 'unverified', 'available', false);
+   '{"English", "Greek"}', 1994, 8, 'unverified', 'available', false)
+ON CONFLICT (slug) DO NOTHING;
 
 
 -- =============================================================================
@@ -457,43 +488,53 @@ INSERT INTO provider_services (id, provider_id, category_id, description, price_
 -- Multimarine — Limassol + Larnaca
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'multimarine-shipyards'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'multimarine-shipyards'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'multimarine-shipyards'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Ocean Marine — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'ocean-marine-equipment'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'ocean-marine-equipment'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Golden Comet — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'golden-comet-marine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'golden-comet-marine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Nautimar — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'nautimar-marine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'nautimar-marine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- C&R Motorboat — Ayia Napa
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'cr-motorboat'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 20, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'cr-motorboat'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 20, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- AK Med Yachting — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'ak-med-yachting'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'ak-med-yachting'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Damianou — Larnaca
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'damianou-electronics'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'damianou-electronics'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- KJ Electronics — Larnaca
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'kj-electronics'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'kj-electronics'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Kafetzidakis — Limassol (loft)
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'kafetzidakis-sails'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'kafetzidakis-sails'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Sails Worx — Larnaca
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'sails-worx'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'sails-worx'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- SEATRIP — All Cyprus
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
@@ -501,88 +542,107 @@ INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_prima
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seatrip-cyprus'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false),
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seatrip-cyprus'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false),
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seatrip-cyprus'), (SELECT id FROM locations WHERE slug = 'paphos-harbour'), 10, false),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seatrip-cyprus'), (SELECT id FROM locations WHERE slug = 'latchi-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seatrip-cyprus'), (SELECT id FROM locations WHERE slug = 'latchi-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- BWA Yachting — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'bwa-yachting-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'bwa-yachting-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Diamantides — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'diamantides-yachting'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'diamantides-yachting'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- ILIC — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'ilic-enterprises'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'ilic-enterprises'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- CMT InterMarine — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'cmt-intermarine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'cmt-intermarine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Yacht Shore — All 3 main marinas
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'yacht-shore'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true),
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'yacht-shore'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'yacht-shore'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'yacht-shore'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Shoham — Limassol + Larnaca
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'shoham-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'shoham-cyprus'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'shoham-cyprus'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Island Oil — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'island-oil'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'island-oil'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Helisea — All Cyprus
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'helisea-bunkering'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true),
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'helisea-bunkering'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'helisea-bunkering'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'helisea-bunkering'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Diving Status — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'diving-status'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'diving-status'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Prestige VIP — Limassol + Larnaca
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'prestige-vip'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'prestige-vip'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 20, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'prestige-vip'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 20, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Acropolis — All Cyprus (Larnaca primary)
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'acropolis-vassos'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 30, true),
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'acropolis-vassos'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, false),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'acropolis-vassos'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 20, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'acropolis-vassos'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 20, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- SeaTaxi — Limassol + St Raphael
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seataxi-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 10, true),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seataxi-cyprus'), (SELECT id FROM locations WHERE slug = 'st-raphael-marina'), 5, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'seataxi-cyprus'), (SELECT id FROM locations WHERE slug = 'st-raphael-marina'), 5, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Hill Robinson — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'hill-robinson-cy'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'hill-robinson-cy'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- InterYachting — Limassol + Ayia Napa
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'interyachting-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'interyachting-cyprus'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'interyachting-cyprus'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Princess Yachts — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'princess-yachts-cy'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'princess-yachts-cy'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 20, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- BP Yachting — Limassol + Larnaca + Ayia Napa
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'bp-yachting'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 15, true),
   (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'bp-yachting'), (SELECT id FROM locations WHERE slug = 'larnaca-marina'), 10, false),
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'bp-yachting'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'bp-yachting'), (SELECT id FROM locations WHERE slug = 'ayia-napa-marina'), 10, false)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- IYC — Limassol (Nicosia office but serves Limassol)
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'iyc-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'iyc-cyprus'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 30, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
 
 -- Aphentrica — Limassol
 INSERT INTO provider_coverage (id, provider_id, location_id, radius_km, is_primary) VALUES
-  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'aphentrica-marine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 50, true);
+  (gen_random_uuid(), (SELECT id FROM providers WHERE slug = 'aphentrica-marine'), (SELECT id FROM locations WHERE slug = 'limassol-marina'), 50, true)
+ON CONFLICT (provider_id, location_id) DO NOTHING;
